@@ -1,0 +1,44 @@
+<div style="margin-top: 5%">
+    <form [formGroup]="pdfCreate" (ngSubmit)="guardarPDF()">
+        <p-panel header="Sube un documento ya creado a la nube">
+            <div class="p-grid">
+                <div class="p-col-4 p-offset-4">
+                    <div class="h6 mt-4">Ingrese los datos necesarios para el PDF</div>
+                    <span class="ui-float-label mt-4">
+                        <input formControlName="titulo" id="float-input" class="form-control" type="text" pInputText pTooltip="Ingrese un titulo descriptivo para el PDF" tooltipEvent="focus">
+                        <label for="float-input">Titulo del documento</label>
+                    </span>
+                    <span class="ui-float-label mt-4">
+                        <input formControlName="autor" id="float-input" class="form-control" type="text" pInputText pTooltip="" tooltipEvent="focus">
+                        <label for="float-input">Autor</label>
+                    </span>
+                    <span class="ui-float-label mt-4">
+                        <input formControlName="asunto" id="float-input" class="form-control" type="text" pInputText pTooltip="Ingresa el asunto del documento Ej. Oficio, Certificado" tooltipEvent="focus">
+                        <label for="float-input">Asunto</label>
+                    </span>
+                    <span class="ui-float-label mt-4">
+                        <input formControlName="comentario" id="float-input" class="form-control" type="text" pInputText pTooltip="Ingresa un comentario descriptivo del documento, trata de ser lo mas claro posible." tooltipEvent="focus">
+                        <label for="float-input">Comentario del PDF</label>
+                    </span>
+                    <span class="ui-float-label mt-4">
+                        <input formControlName="keywords" id="float-input" class="form-control" type="text" pInputText pTooltip="Ingresa palabras clave del documento que permitan identificarlo. Ej: oficio, potabilizacion, cabildo." tooltipEvent="focus">
+                        <label for="float-input">Palabras clave del documento</label>
+                    </span>
+                    <div class="mt-4 p-justify-center d-flex">
+                        <p-fileUpload mode="basic" name="file[]" accept="application/pdf" chooseLabel="Selecciona el archivo en formato .pdf"></p-fileUpload>
+                    </div>
+                </div>
+            </div>
+            <p-footer>
+                <div class="p-grid">
+                    <div class="p-offset-3 p-col-6">
+                        <button pButton type="submit" [disabled]="!pdfCreate.valid" label="Guardar PDF" class="ui-button ui-button-rounded ui-button-success" style="width: 100%"></button>
+                    </div>
+                    <div class="p-col-3">
+                        <button pButton type="button" label="Cancelar" class="ui-button ui-button-rounded ui-button-warning" style="width: 100%" (click)="cancelarPDF()"></button>
+                    </div>
+                </div>
+            </p-footer>
+        </p-panel>
+    </form>
+</div>
