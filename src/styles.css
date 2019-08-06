@@ -1,1 +1,42 @@
 /* You can add global styles to this file, and also import other style files */
+
+legend {
+    width: auto !important;
+}
+
+.ui-dropdown {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    vertical-align: middle;
+    min-width: 12.5em;
+    width: 100%;
+}
+
+.ui-chips-input-token {
+    display: inline-block;
+    vertical-align: middle;
+    list-style-type: none;
+    margin: 0 0 0 .125em;
+    padding: .25em .25em .25em 0;
+    width: 100%;
+}
+
+.ui-inputtext {
+    margin: 0;
+    outline: medium none;
+    padding: .25em;
+    font-weight: normal;
+    width: 100%;
+}
+
+.ui-chips-input-token input {
+    border: 0 none;
+    width: 100% !important;
+    outline: medium none;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 0;
+}
