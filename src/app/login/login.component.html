@@ -1,0 +1,19 @@
+<div class="p-grid p-dir-col p-align-center">
+    <p-card header="Login">
+        <div class="p-col-12">
+            <div class="ui-inputgroup">
+                <span class="ui-inputgroup-addon"><i class="pi pi-user"></i></span>
+                <input type="text" pInputText placeholder="Usuario" style="width: 100%" [(ngModel)]="user.user">
+            </div>
+        </div>
+        <div class="p-col-12">
+            <div class="ui-inputgroup">
+                <span class="ui-inputgroup-addon"><i class="pi pi-key"></i></span>
+                <input type="password" pInputText placeholder="Contraseña" style="width: 100%" [(ngModel)]="user.password">
+            </div>
+        </div>
+        <div class="p-col-12">
+            <button pButton type="submit" label="Ingresar" class="ui-button ui-button-rounded ui-button-primary" style="width: 100%" (click)="login()"></button>
+        </div>
+    </p-card>
+</div>
