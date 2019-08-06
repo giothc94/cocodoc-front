@@ -1,0 +1,28 @@
+<div style="margin-top: 5%">
+    <div class="p-grid">
+        <div class="p-col-12 p-justify-center">
+            <p-panel header="Sistema de archivos actual">
+                <p-tree [value]="files" layout="horizontal" selectionMode="single" [(selection)]="nodoSelect" (onNodeSelect)="nodoSelectF($event)"></p-tree>
+            </p-panel>
+        </div>
+    </div>
+</div>
+<div style="margin-top: 5%">
+    <div class="p-grid">
+        <div class="p-col-12 p-justify-center">
+            <p-panel header="Agregar carpetas al sistema de archivos Cocodoc" *ngIf="nodoSelect">
+                <span class="ui-float-label mt-4">
+                    <input [(ngModel)]="newFile" id="float-input" class="form-control" type="text" pInputText pTooltip="Ingrese el nombre la esta carpeta" tooltipEvent="focus">
+                    <label for="float-input">Nombre de la carpeta</label>
+                </span>
+                <div class="m-3" *ngIf="newFile">
+                    Sera creada en: {{BreadcrumFiles}}{{newFile}}
+                </div>
+                <div class="mt-3">
+                    <p-button label="Crear carpeta" styleClass="mr-2 ui-button-success ui-button-rounded"></p-button>
+                    <p-button label="Cancelar" (onClick)="cancelCreateFolder()" styleClass="ui-button-danger ui-button-rounded"></p-button>
+                </div>
+            </p-panel>
+        </div>
+    </div>
+</div>
