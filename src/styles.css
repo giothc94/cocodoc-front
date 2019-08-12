@@ -1,7 +1,37 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import url('https://fonts.googleapis.com/css?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Long+Cang&display=swap');
 legend {
     width: auto !important;
+}
+
+.headerCocodoc {
+    display: flex;
+    background: #f4f4f4;
+    height: 15vh;
+    align-items: center;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-family: 'Pacifico', cursive;
+    font-size: 35px;
+    color: #4e4e4e;
+    justify-content: space-between;
+}
+
+.footerCocodoc {
+    height: 10vh;
+    background: #f4f4f4;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.giothcode {
+    font-family: 'Long Cang', cursive;
+    font-size: 25px;
 }
 
 .ui-dropdown {
@@ -39,4 +69,22 @@ legend {
     padding: 0;
     box-shadow: none;
     border-radius: 0;
+}
+
+.width {
+    width: 100% !important
+}
+
+body .ui-listbox {
+    padding: 0;
+    min-width: 12em;
+    background: #ffffff;
+    border: 1px solid #a6a6a6;
+    width: 100% !important;
+}
+
+body .ui-dialog {
+    padding: 0;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+    width: 50vw;
 }

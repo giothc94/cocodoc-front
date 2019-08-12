@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class GetService {
 
   FOLDER:string = `directories`
-  URL:string = `http://localhost:3000/api/${this.FOLDER}/`;
+  URL:string = `http://localhost:8000/api/${this.FOLDER}/`;
 
   constructor(private http:HttpClient) { }
 

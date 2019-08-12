@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // primeng
+import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -19,6 +20,7 @@ import {DropdownModule} from 'primeng/dropdown';
 import {ChipsModule} from 'primeng/chips';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {CheckboxModule} from 'primeng/checkbox';
+import {ListboxModule} from 'primeng/listbox';
 
 // fin primeng
 import { AppRoutingModule } from './app-routing.module';
@@ -63,9 +65,10 @@ import { GestionUsuariosComponent } from './gestion-usuarios/gestion-usuarios.co
     DropdownModule,
     ChipsModule,
     InputTextareaModule,
-    CheckboxModule
+    CheckboxModule,
+    ListboxModule
   ],
-  providers: [],
+  providers: [MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

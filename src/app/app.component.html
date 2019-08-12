@@ -1,4 +1,9 @@
-<div class="container card mt-5">
+<div class="container headerCocodoc">
+    <div class="d-flex justify-content-center align-items-center">San José de Cocotog</div>
+    <div class="d-flex justify-content-center align-items-center"><button pButton type="button" label="Cerrar sesion" *ngIf="isLogged" class="ui-button-rounded ui-button-info"></button></div>
+</div>
+
+<div class="container mt-5">
     <div class="mt-5 mb-5">
         <p-tabMenu [model]="menu" *ngIf="isLogged">
             <ng-template pTemplate="item" let-item let-i="index">
@@ -13,4 +18,7 @@
         <router-outlet></router-outlet>
     </div>
 </div>
+<footer class="container d-flex justify-content-center footerCocodoc">
+    <small class="giothcode">&copy;2019 for GIOTHCODE</small>
+</footer>
 <!-- ;display: flex;justify-content: center;align-items: center; -->

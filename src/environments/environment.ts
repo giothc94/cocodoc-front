@@ -5,6 +5,10 @@
 export const environment = {
   production: false
 };
+ 
+export const API_COCODOC = {
+  URL: `http://localhost:8000/api/`
+}
 
 /*
  * For easier debugging in development mode, you can import the following file
