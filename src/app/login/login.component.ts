@@ -11,26 +11,26 @@ import { LoginService } from '../_services/login.service';
 export class LoginComponent implements OnInit {
 
   user: any = {};
-  isLogged: boolean = false;
-
+  message:String;
+  isLogged:boolean;
   constructor(
     private router: Router,
-    private loginService:LoginService
-  ) { 
-    if (this.loginService.userIsLogged) {
-      this.router.navigate(['ingreso']);      
+    private loginService: LoginService,
+  ) {
+  }
+  
+  ngOnInit() {
+    var dataUserActive:any = this.loginService.getCookieDateUser();
+    if(dataUserActive){
+      dataUserActive =  JSON.parse(dataUserActive);
+      this.router.navigate(['user']);
     }
   }
 
-  ngOnInit() {
-  }
-
   login() {
-    console.log(this.user);
-    this.user = {};
-    localStorage.setItem('userToken','A')
-    this.loginService.setLogged = localStorage.getItem('userToken');
-    this.router.navigate(['ingreso']);
-  }
+    this.loginService.registerUser(this.user.user, this.user.password)
+    .then(()=>location.href = '/login')
+    .catch(error=>console.log(error))
+    }
 
 }

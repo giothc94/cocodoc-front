@@ -3,6 +3,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CookieService } from 'ngx-cookie-service';
+
+import { PrettySizeModule } from 'angular-pretty-size';
+
 // primeng
 import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
@@ -16,12 +20,21 @@ import { TooltipModule } from 'primeng/tooltip';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { FieldsetModule } from 'primeng/fieldset';
 import { TreeModule } from 'primeng/tree';
-import {DropdownModule} from 'primeng/dropdown';
-import {ChipsModule} from 'primeng/chips';
-import {InputTextareaModule} from 'primeng/inputtextarea';
-import {CheckboxModule} from 'primeng/checkbox';
-import {ListboxModule} from 'primeng/listbox';
-
+import { DropdownModule } from 'primeng/dropdown';
+import { ChipsModule } from 'primeng/chips';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ListboxModule } from 'primeng/listbox';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { ToolbarModule } from 'primeng/toolbar';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
+import { CalendarModule } from 'primeng/calendar';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { LightboxModule } from 'primeng/lightbox';
+import { InputMaskModule } from 'primeng/inputmask';
 // fin primeng
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -66,9 +79,20 @@ import { GestionUsuariosComponent } from './gestion-usuarios/gestion-usuarios.co
     ChipsModule,
     InputTextareaModule,
     CheckboxModule,
-    ListboxModule
+    ListboxModule,
+    SplitButtonModule,
+    ToolbarModule,
+    MessagesModule,
+    MessageModule,
+    ConfirmDialogModule,
+    CalendarModule,
+    OverlayPanelModule,
+    LightboxModule,
+    InputMaskModule,
+    //prettysize
+    PrettySizeModule
   ],
-  providers: [MessageService],
+  providers: [MessageService, ConfirmationService, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

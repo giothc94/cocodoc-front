@@ -8,17 +8,18 @@ import { ListasComponent } from './listas/listas.component';
 import { UserComponent } from './user/user.component';
 import {ArchivosComponent} from './archivos/archivos.component';
 import {GestionUsuariosComponent} from './gestion-usuarios/gestion-usuarios.component';
+import { AuthGuardService } from './_services/AuthGuard/auth-guard.service';
 
 
 const routes: Routes = [
   {path:'',component:LoginComponent},
   {path:'login', component:LoginComponent},
-  {path:'user', component:UserComponent},
-  {path:'enter', component:IngresoPDFComponent},
-  {path:'upload', component:SubirComponent},
-  {path:'list', component:ListasComponent},
-  {path:'files', component:ArchivosComponent},
-  {path:'users', component:GestionUsuariosComponent}
+  {path:'user', component:UserComponent,canActivate:[AuthGuardService]},
+  {path:'enter', component:IngresoPDFComponent,canActivate:[AuthGuardService]},
+  {path:'upload', component:SubirComponent,canActivate:[AuthGuardService]},
+  {path:'list', component:ListasComponent,canActivate:[AuthGuardService]},
+  {path:'files', component:ArchivosComponent,canActivate:[AuthGuardService]},
+  {path:'users', component:GestionUsuariosComponent,canActivate:[AuthGuardService]}
 ];
 
 @NgModule({

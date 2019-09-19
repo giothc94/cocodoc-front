@@ -88,3 +88,34 @@ body .ui-dialog {
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
     width: 50vw;
 }
+
+body .ui-tree {
+    border: 1px solid #c8c8c8;
+    background-color: #ffffff;
+    color: #333333;
+    padding: 0.571em 1em;
+    width: 100%;
+}
+
+.ui-calendar {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.ui-chips-token {
+    font-size: 14px;
+    padding: 0.2145em 0.429em;
+    margin: 0 0.286em 0.286em 0 !important;
+    background: #647790 !important;
+    color: #ffffff;
+}
+
+.ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem.ui-state-active {
+    background-color: #4e4e4e !important;
+    border: 1px solid #4e4e4e !important;
+}
+
+.ui-treenode {
+    padding-right: 35px !important;
+}

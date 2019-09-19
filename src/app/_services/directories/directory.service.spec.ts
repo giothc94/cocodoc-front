@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CreateService } from './create.service';
+import { DirectoryService } from './directory.service';
 
-describe('CreateService', () => {
+describe('DirectoryService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: CreateService = TestBed.get(CreateService);
+    const service: DirectoryService = TestBed.get(DirectoryService);
     expect(service).toBeTruthy();
   });
 });

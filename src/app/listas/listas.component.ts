@@ -1,67 +1,71 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer } from "@angular/platform-browser";
 import { TreeNode } from 'primeng/api';
+import { DirectoryService } from '../_services/directories/directory.service';
 
 @Component({
-  selector: 'app-listas',
-  templateUrl: './listas.component.html',
-  styleUrls: ['./listas.component.css']
+    selector: 'app-listas',
+    templateUrl: './listas.component.html',
+    styleUrls: ['./listas.component.css']
 })
 export class ListasComponent implements OnInit {
 
-  files: TreeNode[];
+    files: TreeNode[];
+    nodoSelect:TreeNode
+    BreadcrumFiles
+    src
+    URL = 'http://localhost:8000/api/files'
 
-  constructor() { }
+    constructor(private ds: DirectoryService, private sanitizer:DomSanitizer) { }
 
-  ngOnInit() {
-    this.files = 
-      [
-          {
-              "label": "Documents",
-              "data": "Documents Folder",
-              "expandedIcon": "fa fa-folder-open",
-              "collapsedIcon": "fa fa-folder",
-              "children": [{
-                      "label": "Work",
-                      "data": "Work Folder",
-                      "expandedIcon": "fa fa-folder-open",
-                      "collapsedIcon": "fa fa-folder",
-                      "children": [{"label": "Expenses.doc", "icon": "fa fa-file-word-o", "data": "Expenses Document"}, {"label": "Resume.doc", "icon": "fa fa-file-word-o", "data": "Resume Document"}]
-                  },
-                  {
-                      "label": "Home",
-                      "data": "Home Folder",
-                      "expandedIcon": "fa fa-folder-open",
-                      "collapsedIcon": "fa fa-folder",
-                      "children": [{"label": "Invoices.txt", "icon": "fa fa-file-word-o", "data": "Invoices for this month"}]
-                  }]
-          },
-          {
-              "label": "Pictures",
-              "data": "Pictures Folder",
-              "expandedIcon": "fa fa-folder-open",
-              "collapsedIcon": "fa fa-folder",
-              "children": [
-                  {"label": "barcelona.jpg", "icon": "fa fa-file-image-o", "data": "Barcelona Photo"},
-                  {"label": "logo.jpg", "icon": "fa fa-file-image-o", "data": "PrimeFaces Logo"},
-                  {"label": "primeui.png", "icon": "fa fa-file-image-o", "data": "PrimeUI Logo"}]
-          },
-          {
-              "label": "Movies",
-              "data": "Movies Folder",
-              "expandedIcon": "fa fa-folder-open",
-              "collapsedIcon": "fa fa-folder",
-              "children": [{
-                      "label": "Al Pacino",
-                      "data": "Pacino Movies",
-                      "children": [{"label": "Scarface", "icon": "fa fa-file-video-o", "data": "Scarface Movie"}, {"label": "Serpico", "icon": "fa fa-file-video-o", "data": "Serpico Movie"}]
-                  },
-                  {
-                      "label": "Robert De Niro",
-                      "data": "De Niro Movies",
-                      "children": [{"label": "Goodfellas", "icon": "fa fa-file-video-o", "data": "Goodfellas Movie"}, {"label": "Untouchables", "icon": "fa fa-file-video-o", "data": "Untouchables Movie"}]
-                  }]
-          }
-      ]
-  }
+    generateDir(dir) {
+        var files = []
+        var p: TreeNode = {
+            label: dir.name,//.toUpperCase(),
+            data: dir.code
+        }
+        if (dir.children) {
+            var childs = []
+
+            dir.children.forEach(element => {
+                let c = this.generateDir(element)[0]
+                if (c) {
+                    childs.push(c)
+                }
+            });
+            p.children = childs
+            p.expandedIcon = "pi pi-folder-open"//"fa fa-folder-open"
+            p.collapsedIcon = "pi pi-folder"
+            p.selectable = false
+            files.push(p)
+        } else {
+            p.key = dir.path.split('/').pop()
+            p.icon = "pi pi-file"
+            files.push(p)
+        }
+        return files
+    }
+
+    ngOnInit() {
+        this.ds.getDirectory()
+            .subscribe(resp => {
+                if (resp.ok) {
+                    const { objectDir } = resp.data;
+                    this.files = this.generateDir(objectDir)
+                    this.files.forEach(node => {
+                    });
+                }
+            });
+    }
+
+    nodoSelectF(event) {
+        if (event.node) {
+            this.nodoSelect = event.node;
+            this.BreadcrumFiles = this.nodoSelect.key === undefined ? `root/${this.nodoSelect.label}/` : `${this.nodoSelect.key}/`;
+            this.src = this.sanitizer.bypassSecurityTrustResourceUrl(this.URL)
+            console.log(this.src)
+            console.log(this.nodoSelect)
+        }
+    }
 
 }

@@ -1,8 +1,9 @@
 <div class="p-grid m-5">
     <div class="p-col-6">
-        <p-tree [value]="files" [filter]="true" filterMode="strict"></p-tree>
+        <p-tree [value]="files" [filter]="true" selectionMode="single" [(selection)]="nodoSelect" (onNodeSelect)="nodoSelectF($event)" filterMode="lenient"></p-tree>
     </div>
     <div class="p-col-6">
-
+        <!-- <embed src="../../assets/Arguello_Geovanny_Introduccion_a_herramientas_de_explotacion_web_[SEGURIDAD_INFORMATICA]_2019.pdf" type="application/pdf" width="100%" height="500px"> -->
+        <embed *ngIf="src" [src]="src" type="application/pdf" width="100%" height="500px">
     </div>
 </div>

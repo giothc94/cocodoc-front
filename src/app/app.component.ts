@@ -11,22 +11,22 @@ import { Router } from '@angular/router';
 export class AppComponent {
   title = 'Cocodoc | Admin';
   menu: MenuItem[];
-  isLogged:boolean;
+  isLogged: boolean=false;
 
 
   constructor(
-    private router:Router,
-    private loginService:LoginService
-  ){
-    if (this.loginService.userIsLogged) {
-      this.isLogged = true;
-      this.router.navigate(['user']);
-    }else{
-      this.router.navigate(['login']);
-    }
+    private router: Router,
+    private loginService: LoginService
+  ) {
   }
-
   ngOnInit(): void {
+    var dataUserActive:any = this.loginService.getCookieDateUser();
+    if(dataUserActive){
+      dataUserActive =  JSON.parse(dataUserActive);
+      this.isLogged = dataUserActive.isLogged
+    }else{
+      this.isLogged = false;
+    }
     this.menu = [
       {
         label: 'Usuario',
@@ -69,5 +69,9 @@ export class AppComponent {
 
   disableLink() {
     this.menu.forEach(x => x.expanded = false)
+  }
+  signOut(){
+    this.loginService.signOut();
+    location.href = '/login'
   }
 }

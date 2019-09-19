@@ -1,62 +1,116 @@
-<div style="margin-top: 5%">
+<div class="mt-3">
     <form [formGroup]="pdfCreate" (ngSubmit)="guardarPDF()">
-        <p-panel header="Crea PDF a partir de imagenes y guardalas en la nube">
+        <p-panel header="Ingrese los datos necesarios para el PDF">
             <div class="p-grid">
-                <div class="p-col-4">
-                    <div class="h6 mt-4">Ingrese los datos necesarios para el PDF</div>
-                    <span class="ui-float-label mt-4">
-                        <input formControlName="titulo" id="float-input" class="form-control" type="text" pInputText pTooltip="Ingrese un titulo descriptivo para el PDF" tooltipEvent="focus">
-                        <label for="float-input">Titulo del documento</label>
-                    </span>
-                    <span class="ui-float-label mt-4">
-                        <input formControlName="autor" id="float-input" class="form-control" type="text" pInputText pTooltip="Ingrese el nombre del autor del documento" tooltipEvent="focus">
-                        <label for="float-input">Autor</label>
-                    </span>
-                    <span class="ui-float-label mt-4">
-                        <input formControlName="asunto" id="float-input" class="form-control" type="text" pInputText pTooltip="Ingresa el asunto del documento Ej. Oficio, Certificado" tooltipEvent="focus">
-                        <label for="float-input">Asunto</label>
-                    </span>
-                    <span class="ui-float-label mt-4">
-                        <textarea rows="1" cols="30" pInputTextarea autoResize="autoResize" formControlName="comentario" id="float-input"  pTooltip="Ingresa un comentario descriptivo del documento, trata de ser lo mas claro posible." tooltipEvent="focus"></textarea>
-                        <label for="float-input">Comentario del PDF</label>
-                    </span>
-                    <span class="ui-float-label mt-4">
-                        <p-chips formControlName="keywords" placeholder="Presiona enter despues de cada palabra" pTooltip="Ingresa palabras clave del documento que permitan identificarlo. Ej: oficio, potabilizacion, cabildo." tooltipPosition="top" tooltipEvent="hover"></p-chips>       
-                    </span>
-                    <span class="ui-float-label mt-4">
-                        <p-dropdown emptyFilterMessage="Al parecer no existe la carpeta." [options]="cars" formControlName="node" filter="true" placeholder="Selecciona la carpeta en la que vas a guardar" pTooltip="Selecciona la carpeta segun el tipo de documento" tooltipEvent="hover">
-                            <ng-template let-car pTemplate="item">
-                                <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
-                                    <img src="" style="width:24px;position:absolute;top:1px;left:5px" />
-                                    <div style="font-size:14px;float:right;margin-top:4px">{{car.label}}</div>
-                                </div>
-                            </ng-template>
-                        </p-dropdown>
-                    </span>
-                </div>
-                <div class="p-col-7 p-offset-1">
-                    <div class="h6 mt-4 mb-3">Seleccione las imagenes para el documento</div>
-                    <div style="height: 500px; overflow: scroll">
-                        <p-fileUpload name="myfile[]" multiple="true" (onSelect)="selectImg($event)" [showUploadButton]="false" chooseLabel="Seleccionar imagenes" cancelLabel="Cancelar" url="http://localhost:3000/api/docs/" [auto]="true"></p-fileUpload>
+                <div class="p-col-8">
+                    <div class="p-grid">
+                        <div class="p-col-6">
+                            <span class="ui-float-label mt-3">
+                                    <input formControlName="title" id="float-input" class="form-control" type="text" pInputText pTooltip="Ingrese un titulo descriptivo para el PDF" tooltipEvent="focus" autocomplete="off" >
+                                    <label for="float-input">Titulo del documento</label>
+                                </span>
+                        </div>
+                        <div class="p-col-6">
+                            <span class="ui-float-label mt-3">
+                                    <input formControlName="subject" id="float-input" class="form-control" type="text" pInputText pTooltip="Ingresa el asunto del documento Ej. Oficio, Certificado" tooltipEvent="focus" autocomplete="off" >
+                                    <label for="float-input">Asunto</label>
+                                </span>
+                        </div>
+                        <div class="p-col-12">
+                            <span class="ui-float-label mt-3">
+                                    <textarea rows="1" cols="30" pInputTextarea autoResize="autoResize" formControlName="coment" id="float-input"  pTooltip="Ingresa un comentario descriptivo del documento, trata de ser lo mas claro posible." tooltipEvent="focus" autocomplete="off" ></textarea>
+                                    <label for="float-input">Comentario del documento</label>
+                                </span>
+                        </div>
+                        <div class="p-col-6">
+                            <span class="ui-float-label mt-3">
+                                    <p-calendar formControlName="brodcastDate" [monthNavigator]="true" [yearNavigator]="true" yearRange="1800:2030" pTooltip="Selecciona la fecha en la que se emitio el documento." tooltipEvent="hover" autocomplete="off" ></p-calendar>
+                                    <label for="float-input">Fecha de emision del documento</label>
+                                </span>
+                        </div>
+                        <div class="p-col-6">
+                            <span class="ui-float-label mt-3">
+                                    <p-calendar formControlName="receptionDate" [monthNavigator]="true" [yearNavigator]="true" yearRange="1800:2030" pTooltip="Selecciona la fecha en la que se recepto el documento." tooltipEvent="hover" autocomplete="off" ></p-calendar>
+                                    <label for="float-input">Fecha de recepcion del documento</label>
+                                </span>
+                        </div>
+                        <div class="p-col-6">
+                            <span class="ui-float-label mt-3">
+                                    <input formControlName="issuingEntity" id="float-input" class="form-control" type="text" pInputText pTooltip="Ingresa el nombre de la entidad que emite el documento" tooltipEvent="focus" autocomplete="off" >                                    
+                                    <label for="float-input">Nombre de la entidad que emite el documento</label>
+                                </span>
+                        </div>
+                        <div class="p-col-6">
+                            <span class="ui-float-label mt-3">
+                                    <input formControlName="receivingEntity" id="float-input" class="form-control" type="text" pInputText pTooltip="Ingresa el nombre de la entidad que recepta el documento" tooltipEvent="focus" autocomplete="off" >                                    
+                                    <label for="float-input">Nombre de la entidad que recepta el documento</label>
+                                </span>
+                        </div>
+                        <div class="p-col-12">
+                            <span class="ui-float-label mt-3">
+                                    <p-chips formControlName="keywords" placeholder="Palabras clave, presiona enter despues de cada palabra" pTooltip="Ingresa palabras clave del documento que permitan identificarlo. Ej: oficio, potabilizacion, cabildo." tooltipPosition="top" tooltipEvent="hover"></p-chips>
+                                </span>
+                        </div>
+                        <div class="p-offset-4 p-col-4">
+                            <span class="ui-float-label mt-3">
+                                <input formControlName="numberOfSheets" id="float-input" class="form-control" type="text" pInputText pTooltip="Ingresa la cantidad de hojas del documento" tooltipEvent="focus" autocomplete="off" >                                                                    
+                                <label for="float-input">Cantidad de hojas del documento</label>
+                                </span>
+                        </div>
+                        <div class="p-col-4">
+                            <span class="ui-float-label mt-3">
+                                <p-inputMask formControlName="segment" id="float-input" mask="99-99" pTooltip="Ingresa la numeracion del documento. Ej. 02-05, que es igual a (Hojas del 02 al 05)" tooltipEvent="hover" ></p-inputMask>
+                                <label for="float-input">Segmento numerico del documento</label>
+                                </span>
+                        </div>
+                        <div class="p-col-12">
+                            <span class="ui-float-label mt-3">
+                                    <span class="ui-float-label mt-3">
+                                        Seleccione el lugar donde guardar el PDF: <span class="text-info" >{{BreadcrumFiles}} </span>
+                            </span>
+                            <i class="pi pi-refresh" style="cursor: pointer;display: flex;justify-content: flex-end;" (click)="loadDirectory()"></i>
+                            <p-tree [value]="files" layout="horizontal" selectionMode="single" [(selection)]="nodoSelect" (onNodeSelect)="nodoSelectF($event)"></p-tree>
+                            </span>
+                        </div>
+                        <div class="p-col-12">
+                            <span class="ui-float-label mt-3">
+                                    <textarea rows="1" cols="30" pInputTextarea autoResize="autoResize" formControlName="responsibleObservation" id="float-input"  pTooltip="Ingresa alguna observacion que tengas que hacer con respecto al documento." tooltipEvent="focus" autocomplete="off" ></textarea>
+                                    <label for="float-input">Observacion de encargado (Opcional)</label>
+                                </span>
+                        </div>
                     </div>
                 </div>
-                <div class="p-col-12">
-                    <div class="p-grid p-justify-center">
-                        <div class="p-col-4">
+                <div class="p-col-4">
+                    <div class="p-grid">
+                        <div class="p-col-12">
+                            <span class="ui-float-label mt-3">
+                                    <input id="float-input" type="file" #filesClaer (change)="selecteds($event)" multiple pInputText pTooltip="Selecciona las documentos digitalizados." tooltipEvent="hover" title="">
+                                </span>
+                            <div *ngIf="uploadedFiles" class="mt-4 p-2" style="max-height: 420px; overflow-y: scroll">
+                                <div *ngFor="let file of uploadedFiles" class="card p-2 mb-2 d-flex flex-row justify-content-around">
+                                    <div>
+                                        <i class="pi pi-image" style="font-size: 40px;"></i>
+                                        <!-- <img src="{{file.src}}" alt="{{file.name}}" style="width: 75px; height: 100px;"> -->
+                                    </div>
+                                    <div class="d-flex flex-column justify-content-center">
+                                        <small><strong>Nombre:</strong> {{file.name}}</small>
+                                        <small><strong>Tamaño:</strong> {{file.size}}</small>
+                                        <small><strong>Tipo:</strong> {{file.mimetype}}</small>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <p-footer>
-                <div class="p-grid">
-                    <div class="p-offset-3 p-col-6">
-                        <button pButton type="submit" [disabled]="!pdfCreate.valid" label="Guardar PDF" class="ui-button ui-button-rounded ui-button-success" style="width: 100%"></button>
-                    </div>
-                    <div class="p-col-3">
-                        <button pButton type="button" label="Cancelar" class="ui-button ui-button-rounded ui-button-warning" style="width: 100%" (click)="cancelarPDF()"></button>
-                    </div>
+            <div class="p-grid">
+                <div *ngIf="pdfCreate.valid" class="p-offset-3 p-col-6">
+                    <button pButton type="submit" label="Guardar PDF" class="ui-button ui-button-rounded ui-button-success" style="width: 100%"></button>
                 </div>
-            </p-footer>
+                <div class="p-col-3">
+                    <button pButton type="button" label="Cancelar" class="ui-button ui-button-rounded ui-button-secondary" style="width: 100%" (click)="cancelarPDF()"></button>
+                </div>
+            </div>
         </p-panel>
     </form>
 </div>
