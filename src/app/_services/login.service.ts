@@ -8,8 +8,6 @@ import { API_COCODOC } from '../../environments/environment.prod'
 })
 export class LoginService {
   private URL = `${API_COCODOC.URL}auth/`
-  private _isLogged: boolean;
-  private _userLogged: Object;
 
   constructor(
     private cookieService: CookieService,
@@ -41,8 +39,11 @@ export class LoginService {
       this.http.post(`${this.URL}log-in`, {}, { headers: this.setHeader('Basic', null, user, password) }).toPromise()
         .then((resp: any) => {
           this.encryptTokenCookie(resp.token);
-          this.setCookieDateUser(resp.user, true);
-          resolve(resp.user)
+          return this.http.get(`${API_COCODOC.URL}users/${resp.user.sub}`,{ headers: this.setHeader('Bearer', this.decryptTokenCookie()) }).toPromise();
+        })
+        .then((user:any)=>{
+          this.setCookieDateUser(user.User, true);
+          resolve(user);
         })
         .catch(reject)
     })
@@ -58,6 +59,12 @@ export class LoginService {
       authorizationData = 'Bearer ' + token;
       headers = new HttpHeaders({ 'Authorization': authorizationData });
     }
+    return headers;
+  }
+  public getHeaderAuthToken():HttpHeaders{
+    let token = this.decryptTokenCookie();
+    let authorizationData = 'Bearer ' + token;
+    let headers:HttpHeaders = new HttpHeaders({ 'Authorization': authorizationData });
     return headers;
   }
 
@@ -79,6 +86,10 @@ export class LoginService {
 
   private decryptTokenCookie(){
     return Crypto.AES.decrypt(this.cookieService.get('UTCocodoc'),API_COCODOC.PUBLIC_API_KEY).toString(Crypto.enc.Utf8) || null;
+  }
+
+  public getToken(){
+    return this.decryptTokenCookie();
   }
 
   public signOut():void{

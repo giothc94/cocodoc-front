@@ -10,9 +10,9 @@
                 </div>
                 <div class="p-col-6">
                     <div class="data-perfil">
-                        <p>Nombre del usuario.</p>
-                        <p>Cargo dentro de la comuna.</p>
-                        <p>Cedula de identidad.</p>
+                        <p class="mb-2"><span><strong>Cédula:</strong></span> {{ user.Cedula | titlecase }}</p>
+                        <p class="mb-2"><span><strong>Nombre del usuario:</strong></span><br> {{user.PrimerNombre | titlecase}} {{ user.SegundoNombre | titlecase }} {{ user.PrimerApellido | titlecase }} {{ user.SegundoApellido | titlecase }}</p>
+                        <p class="mb-2"><span><strong>Tipo de usuario:</strong></span> {{ user.TipoUsuario | titlecase }}</p>
                     </div>
                 </div>
             </div>
