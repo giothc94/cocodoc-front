@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from "@angular/platform-browser";
 import { TreeNode } from 'primeng/api';
 import { DirectoryService } from '../_services/directories/directory.service';
+import { LoginService } from '../_services/login.service';
+import { FilesService } from '../_services/files/files.service';
 
 @Component({
     selector: 'app-listas',
@@ -16,7 +18,7 @@ export class ListasComponent implements OnInit {
     src
     URL = 'http://localhost:8000/api/files'
 
-    constructor(private ds: DirectoryService, private sanitizer:DomSanitizer) { }
+    constructor(private ds: DirectoryService, private sanitizer:DomSanitizer,private filesService:FilesService) { }
 
     generateDir(dir) {
         var files = []
@@ -61,11 +63,29 @@ export class ListasComponent implements OnInit {
     nodoSelectF(event) {
         if (event.node) {
             this.nodoSelect = event.node;
-            this.BreadcrumFiles = this.nodoSelect.key === undefined ? `root/${this.nodoSelect.label}/` : `${this.nodoSelect.key}/`;
-            this.src = this.sanitizer.bypassSecurityTrustResourceUrl(this.URL)
-            console.log(this.src)
-            console.log(this.nodoSelect)
+            // this.BreadcrumFiles = this.nodoSelect.key === undefined ? `root/${this.nodoSelect.label}/` : `${this.nodoSelect.key}/`;
+            console.log(event.node.data)
+            this.filesService.getDocument(event.node.data).toPromise()
+            .then(resp=>{
+                let file = new Blob([resp],{type:'application/pdf'})
+                this.src = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file));
+                this.collapseAll();
+            })
+            .catch(error=>console.log(error))
         }
     }
+    collapseAll() {
+        this.files.forEach(node => {
+          this.expandRecursive(node, false);
+        });
+    }
+    private expandRecursive(node: TreeNode, isExpand: boolean) {
+        node.expanded = isExpand;
+        if (node.children) {
+          node.children.forEach(childNode => {
+            this.expandRecursive(childNode, isExpand);
+          });
+        }
+      }
 
 }

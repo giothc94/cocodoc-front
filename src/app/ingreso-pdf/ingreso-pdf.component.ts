@@ -6,6 +6,7 @@ import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@ang
 import { FilesService } from '../_services/files/files.service';
 import { DirectoryService } from '../_services/directories/directory.service';
 import { TreeNode } from 'primeng/api';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-ingreso-pdf',
@@ -14,6 +15,7 @@ import { TreeNode } from 'primeng/api';
   providers: [MessageService]
 })
 export class IngresoPDFComponent implements OnInit {
+  @ViewChild('filesClaer', { static: false }) filesClaer: ElementRef;
   uploadedFiles: Array<any>;
   pdfCreate: FormGroup;
   files: Array<File>;
@@ -21,10 +23,29 @@ export class IngresoPDFComponent implements OnInit {
   nodoSelect: TreeNode
   BreadcrumFiles
   formData = new FormData()
-  @ViewChild('filesClaer', { static: false }) filesClaer: ElementRef;
+  private progress;
 
   constructor(private ds: DirectoryService, private messageService: MessageService, private fb: FormBuilder, private PDF: FilesService, private prettySize: PrettySizeService) {
 
+  }
+
+  ngOnInit() {
+
+    this.pdfCreate = new FormGroup({
+      'title': new FormControl(null, [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
+      'subject': new FormControl(null, [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
+      'comment': new FormControl(null, [Validators.required, Validators.pattern('^[a-zA-Z0-9 ]+$')]),
+      'broadcastDate': new FormControl(null, [Validators.required]),
+      'receptionDate': new FormControl(null, [Validators.required]),
+      'keywords': new FormControl(null, [Validators.required]),
+      'idFolder': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]+$')]),
+      'segment': new FormControl(null, [Validators.required, Validators.pattern('^[0-9-]+$')]),
+      'issuingEntity': new FormControl(null, [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
+      'receivingEntity': new FormControl(null, [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
+      'numberOfSheetsOriginalDocument': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]+$')]),
+      'responsibleObservation': new FormControl(null, [])
+    });
+    this.loadDirectory()
   }
 
   generateDir(dir) {
@@ -52,27 +73,7 @@ export class IngresoPDFComponent implements OnInit {
     return files
   }
 
-  ngOnInit() {
-
-    this.pdfCreate = new FormGroup({
-      'title': new FormControl(null, Validators.required),
-      'subject': new FormControl(null, Validators.required),
-      'coment': new FormControl(null, Validators.required),
-      'brodcastDate': new FormControl(null, Validators.required),
-      'receptionDate': new FormControl(null, Validators.required),
-      'keywords': new FormControl(null, Validators.required),
-      'idFolder': new FormControl(null, Validators.required),
-      'segment': new FormControl(null, Validators.required),
-      'issuingEntity': new FormControl(null, Validators.required),
-      'receivingEntity': new FormControl(null, Validators.required),
-      'numberOfSheets': new FormControl(null, Validators.required),
-      'responsibleObservation': new FormControl('Ninguna', []),
-      'documentsFiles': new FormControl(null, Validators.required)
-    });
-    this.loadDirectory()
-  }
-
-  loadDirectory(){
+  loadDirectory() {
     this.ds.getDirectory()
       .subscribe(resp => {
         if (resp.ok) {
@@ -94,31 +95,16 @@ export class IngresoPDFComponent implements OnInit {
   }
 
   selecteds(event) {
-    this.formData.delete('images')
-    this.formData.delete('documentsFiles')
     this.uploadedFiles = []
     let { files } = event.target
-    let names: Array<any> = []
     if (files) {
-      for (let i = 0; i < files.length; i++) {
-        // let reader = new FileReader()
-        const element = files[i];
+      for (const element of files) {
         this.formData.append('images', element, element.name)
-        names.push(element.name)
-        // this.filesOrder.push(element.name)
-        // reader.readAsDataURL(element)
-        // reader.onload = async () => {
-        // let src = reader.result
-        // }
         this.uploadedFiles.push({ name: element.name, size: this.prettySize.pretty(element.size), mimetype: element.type })
       }
-      this.pdfCreate.controls['documentsFiles'].setValue(names)
-      names = []
-      this.pdfCreate.controls['documentsFiles'].value.forEach(element => {
-        this.formData.append('documentsFiles',element)
-      });
     }
   }
+
   private expandRecursive(node: TreeNode, isExpand: boolean) {
     node.expanded = isExpand;
     if (node.children) {
@@ -128,38 +114,51 @@ export class IngresoPDFComponent implements OnInit {
     }
   }
   guardarPDF() {
-    // envio api en node js por post
-    this.formData.set('title', this.pdfCreate.get('title').value)
-    this.formData.set('subject', this.pdfCreate.get('subject').value)
-    this.formData.set('coment', this.pdfCreate.get('coment').value)
-    this.formData.set('brodcastDate', this.pdfCreate.get('brodcastDate').value)
-    this.formData.set('receptionDate', this.pdfCreate.get('receptionDate').value)
-    for (const key of this.pdfCreate.controls['keywords'].value) {
-      this.formData.append('keywords',key)
+    if (this.pdfCreate.valid && this.formData.get('images')) {
+      let keys = Object.keys(this.pdfCreate.value)
+      for (const key of keys) {
+        if (key === 'keywords') {
+          for (const keyword of this.pdfCreate.controls['keywords'].value) {
+            this.formData.append(key, keyword)
+          }
+        } else {
+          this.formData.set(key, this.pdfCreate.get(key).value)
+        }
+      }
+      this.formData.forEach((data, key) => console.log(key + ":" + data))
+      this.PDF.generatePdf(this.formData)
+        .subscribe(event => {
+          this.progress = event.loaded ? Math.floor(event.loaded * 100 / event.total) : 100;
+          if (event.type === HttpEventType.Response) {
+            this.showSuccessCreateDocument()
+            this.formData = new FormData()
+            this.pdfCreate.reset()
+            this.progress = null;
+          }
+        }, error => {
+          this.uploadedFiles = null;
+          this.filesClaer.nativeElement.value = '';
+          this.showError('Documento existente', error.error.error.message)
+        })
     }
-    this.formData.set('idFolder', this.pdfCreate.get('idFolder').value)
-    this.formData.set('segment', this.pdfCreate.get('segment').value)
-    this.formData.set('issuingEntity', this.pdfCreate.get('issuingEntity').value)
-    this.formData.set('receivingEntity', this.pdfCreate.get('receivingEntity').value)
-    this.formData.set('numberOfSheets', this.pdfCreate.get('numberOfSheets').value)
-    this.formData.set('responsibleObservation', this.pdfCreate.get('responsibleObservation').value)
-    this.PDF.generatePdf(this.formData)
-      .subscribe(resp => {
-        console.log('resp', resp)
-        this.formData = new FormData()
-      }, error => {
-        console.log('error', error)
-      })
-    // this.pdfCreate.reset()
   }
   clearImgs() {
     this.files = []
   }
   cancelarPDF() {
-    this.pdfCreate.reset()
-    this.uploadedFiles = null
-    this.filesClaer.nativeElement.value = ''
-    this.formData = new FormData()
+    this.pdfCreate.reset();
+    this.BreadcrumFiles = '';
+    this.uploadedFiles = null;
+    this.filesClaer.nativeElement.value = '';
+    this.formData = new FormData();
+    this.progress = null;
+  }
+
+  showError(summary, detail) {
+    this.messageService.add({ key: 'errorCreatePdf', severity: 'error', summary: summary, detail: detail });
+  }
+  showSuccessCreateDocument() {
+    this.messageService.add({ key: 'createSuccess', severity: 'success', summary: 'Documento creado', detail: 'Has creado un documento en el sistema' });
   }
 
 }

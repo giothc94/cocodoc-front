@@ -2,16 +2,19 @@ import { Injectable } from '@angular/core';
 import { API_COCODOC } from '../../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { LoginService } from '../login.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DirectoryService {
-
-  constructor(private http:HttpClient) { }
+  private headers:HttpHeaders;
+  constructor(private http:HttpClient,private loginService:LoginService) { 
+    this.headers = this.loginService.getHeaderAuthToken()
+  }
 
   getDirectory():Observable<any>{
-    return this.http.get(`${API_COCODOC.URL}directories/`);
+    return this.http.get(`${API_COCODOC.URL}directories/`,{headers:this.headers});
   }
   createFolder(newFolder):Observable<any>{
     return this.http.post(`${API_COCODOC.URL}directories/`,newFolder);

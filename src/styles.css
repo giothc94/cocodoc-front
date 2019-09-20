@@ -119,3 +119,23 @@ body .ui-tree {
 .ui-treenode {
     padding-right: 35px !important;
 }
+
+body .ui-tree {
+    border: 1px solid #c8c8c8;
+    background-color: #ffffff;
+    color: #333333;
+    padding: 0.571em 1em;
+    max-height: 500px;
+    /* height: 500px !important; */
+}
+
+body .ui-tree .ui-tree-container {
+    padding: 0.286em;
+    margin: 0;
+    /* height: 400px; */
+    max-height: 400px !important;
+}
+
+.ui-g-12 {
+    width: 100% !important;
+}
