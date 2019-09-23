@@ -139,3 +139,7 @@ body .ui-tree .ui-tree-container {
 .ui-g-12 {
     width: 100% !important;
 }
+
+.ui-listbox-list .ng-star-inserted {
+    text-transform: uppercase !important;
+}

@@ -38,13 +38,10 @@ export class LoginService {
     return new Promise((resolve, reject) => {
       this.http.post(`${this.URL}log-in`, {}, { headers: this.setHeader('Basic', null, user, password) }).toPromise()
         .then((resp: any) => {
-          this.encryptTokenCookie(resp.token);
-          const token = this.decryptTokenCookie();
-          console.log('RESP',token)
-          return this.http.get(`${API_COCODOC.URL}users/${resp.user.sub}`,{ headers: this.setHeader('Bearer', token) }).toPromise();
+          this.encryptTokenCookie(resp.token);;
+          return this.http.get(`${API_COCODOC.URL}users/${resp.user.sub}`,{ headers: this.setHeader('Bearer', resp.token) }).toPromise();
         })
         .then((user:any)=>{
-          console.log('RESP',user)
           this.setCookieDateUser(user.User, true);
           resolve(user);
         })

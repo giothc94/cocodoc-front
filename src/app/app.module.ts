@@ -35,7 +35,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { LightboxModule } from 'primeng/lightbox';
 import { InputMaskModule } from 'primeng/inputmask';
-import {ProgressBarModule} from 'primeng/progressbar';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { SelectButtonModule } from 'primeng/selectbutton';
 // fin primeng
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -91,6 +92,7 @@ import { GestionUsuariosComponent } from './gestion-usuarios/gestion-usuarios.co
     LightboxModule,
     InputMaskModule,
     ProgressBarModule,
+    SelectButtonModule,
     //prettysize
     PrettySizeModule
   ],

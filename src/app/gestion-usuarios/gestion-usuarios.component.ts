@@ -12,19 +12,26 @@ import { FormGroup, FormControl, Validators, FormArray, AbstractControl, FormBui
 export class GestionUsuariosComponent implements OnInit {
   users: SelectItem[] = []
   roles = []
-  newUser: FormGroup
+  updateUserForm: FormGroup
   userSelected
   dataUserSelected
   dataUser
   btnEditUser = false
+  btnCreateUser = false
+  keyword;
 
   constructor(private us: UsersService, private fb: FormBuilder, private readonly messageService: MessageService) {
+
+  }
+
+  ngOnInit() {
+    this.keyword = '';
     this.us.getRoles()
-      .subscribe(({ data }) => {
-        data.forEach(element => {
+      .subscribe(({ Response }) => {
+        Response.forEach(element => {
           this.roles.push(
             {
-              label: element.type,
+              label: element.type_rol,
               value: element.id_rol
             })
         });
@@ -32,37 +39,63 @@ export class GestionUsuariosComponent implements OnInit {
     this.getUsers()
     this.setForm()
   }
-
-  ngOnInit() {
+  searchDataUser() {
+    if (this.keyword) {
+      this.users = []
+      this.us.searchDataUser({ keyword: this.keyword })
+        .subscribe((resp:any) => {
+          const {Coincidences} = resp
+          if(Coincidences.length  < 1 ) this.users = [];
+          Coincidences.forEach(element => {
+            this.users.push({
+              label: `${element.PrimerNombre} ${element.SegundoNombre} ${element.PrimerApellido} ${element.SegundoApellido}`,
+              value: {
+                id: element.Id,
+                cedula: element.Cédula,
+                idRol: element.IdRol,
+                rol: element.TipoUsuario,
+                nombre: `${element.PrimerNombre} ${element.SegundoNombre} ${element.PrimerApellido} ${element.SegundoApellido}`
+              }
+            })
+          });
+        },error=>{
+        })
+    }else{
+      this.showError('Busqueda vacía','El campo de busqueda esta vacío.');
+    }
   }
   saveUser() {
-    let { status, value } = this.newUser
+    let { status, value } = this.updateUserForm
     if (status === 'VALID') {
       this.us.createUser(value)
-        .subscribe((resp) => {
-          console.log(resp)
-          this.newUser.reset()
+        .subscribe(resp => {
+          this.updateUserForm.reset()
           this.getUsers()
+          this.btnCreateUser = false;
           this.showSuccessCreateUser()
-        });
+        },
+          error => {
+            this.showError('No se creo el usuario', error.error.error.message)
+          });
     } else if (status === 'INVALID') {
       console.log('No se puede realizar el registro')
     }
   }
 
   getUsers() {
-    this.users = []
+    this.keyword = '';
+    this.users = [];
     this.us.getUsers()
-      .subscribe(({ data }) => {
-        data.forEach(element => {
+      .subscribe(({ ListUsers }) => {
+        ListUsers.forEach(element => {
           this.users.push({
-            label: `${element.PRIMER_NOMBRE} ${element.SEGUNDO_NOMBRE} ${element.PRIMER_APELLIDO} ${element.SEGUNDO_APELLIDO}`,
+            label: `${element.PrimerNombre} ${element.SegundoNombre} ${element.PrimerApellido} ${element.SegundoApellido}`,
             value: {
-              id: element.ID,
-              cedula: element.CEDULA,
-              idRol: element.ID_ROL,
-              rol:element.TIPO_USUARIO,
-              nombre: `${element.PRIMER_NOMBRE} ${element.SEGUNDO_NOMBRE} ${element.PRIMER_APELLIDO} ${element.SEGUNDO_APELLIDO}`
+              id: element.Id,
+              cedula: element.Cédula,
+              idRol: element.IdRol,
+              rol: element.TipoUsuario,
+              nombre: `${element.PrimerNombre} ${element.SegundoNombre} ${element.PrimerApellido} ${element.SegundoApellido}`
             }
           })
         });
@@ -70,48 +103,48 @@ export class GestionUsuariosComponent implements OnInit {
   }
 
   click({ value }) {
+    this.btnEditUser = false;
+    this.btnCreateUser = false;
     this.dataUserSelected = value
-    this.userSelected = value || ''
+    this.userSelected = value
   }
   setForm(user?) {
-    const { CEDULA, ID, ID_ROL, PRIMER_APELLIDO, PRIMER_NOMBRE, SEGUNDO_APELLIDO, SEGUNDO_NOMBRE, TIPO_USUARIO } = user || ''
-    this.newUser = new FormGroup({
-      'cedula': new FormControl(CEDULA, [Validators.required, Validators.minLength(10), Validators.maxLength(13), Validators.pattern('^[0-9]+$')]),
-      'pNombre': new FormControl(PRIMER_NOMBRE, [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
-      'sNombre': new FormControl(SEGUNDO_NOMBRE, [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
-      'pApellido': new FormControl(PRIMER_APELLIDO, [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
-      'sApellido': new FormControl(SEGUNDO_APELLIDO, [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
-      'idRol': new FormControl(ID_ROL, [Validators.required, Validators.pattern('^[0-9]+$')]),
+    const { Cedula, Id, IdRol, PrimerApellido, PrimerNombre, SegundoApellido, SegundoNombre, TipoUsuario } = user || '';
+    this.updateUserForm = new FormGroup({
+      'cedula': new FormControl(Cedula || '', [Validators.required, Validators.minLength(10), Validators.maxLength(13), Validators.pattern('^[0-9]+$')]),
+      'pNombre': new FormControl(PrimerNombre || '', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
+      'sNombre': new FormControl(SegundoNombre || '', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
+      'pApellido': new FormControl(PrimerApellido || '', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
+      'sApellido': new FormControl(SegundoApellido || '', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
+      'idRol': new FormControl(IdRol || '', [Validators.required, Validators.pattern('^[0-9]+$')])
     })
   }
   editUser() {
-    this.btnEditUser = true
-    this.dataUser = this.dataUserSelected
-    this.dataUserSelected = {}
-    this.us.getUser(this.dataUser.id)
-      .subscribe(({ data }) => {
-        this.setForm(data)
+    let _id = this.dataUserSelected.id
+    this.us.getUser(_id)
+      .subscribe(({ User }) => {
+        this.setForm(User)
+        this.updateUserForm.addControl('id', new FormControl(User.Id, [Validators.required, Validators.pattern('^[0-9]+$')]))
         this.btnEditUser = true
-        this.userSelected = ''
       })
   }
+
   updateUser() {
-    let { status, value } = this.newUser
-    value.id = this.dataUser.id
+    let { status, value } = this.updateUserForm;
     if (status === 'VALID') {
       this.us.updateUser(value)
-        .subscribe((resp) => {
-          if (resp.ok) {
-            this.newUser.reset()
+        .subscribe(resp => {
+          if (resp.Ok) {
+            this.updateUserForm.reset()
             this.getUsers()
             this.showSuccessEditUser()
             this.btnEditUser = false
             this.userSelected = ''
-          } else {
-            const {message, response} = resp
-            this.showError(message,response)
           }
-        });
+        },
+          error => {
+            this.showError('No se creo el usuario', error.error.error.message)
+          });
     } else if (status === 'INVALID') {
       console.log('No se puede realizar el registro')
     }
@@ -119,35 +152,38 @@ export class GestionUsuariosComponent implements OnInit {
   cancelForm() {
     this.setForm();
     this.btnEditUser = false
+    this.btnCreateUser = false
     this.userSelected = ''
   }
-
-  addSingle() {
-    this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Via MessageService' });
+  actionCreateUser() {
+    this.btnCreateUser = true;
+    this.setForm();
   }
+
   showConfirm() {
     this.messageService.clear();
     this.messageService.add({ key: 'deleteUser', sticky: true, severity: 'warn', summary: 'Eliminar el registro ?', detail: 'Confirme para eliminar permanentemente el registro del usuario' });
   }
 
-  async confirmDelete() {
+  confirmDelete() {
     this.us.deleteUser(this.dataUserSelected.id)
-      .subscribe((result) => {
-        if (result.ok) {
+      .subscribe(result => {
+        if (result.Ok) {
           this.userSelected = ''
           this.messageService.clear();
           this.showSuccessDeleteUser()
           this.getUsers()
+          this.btnEditUser = false;
+          this.btnCreateUser = false;
         }
-        // console.log(result)
-        // message: "Usuario borrado"
-        // ok: true
-        // status: 200
-        // statusText: "Ok"
+      }, error => {
+        this.userSelected = ''
+        this.messageService.clear();
+        this.showError('No se elimino el usuario', 'Consulta con el administrador del sistema.')
+        this.getUsers()
       })
   }
   cancelDelete() {
-    this.userSelected = ''
     this.messageService.clear();
   }
 
@@ -160,7 +196,7 @@ export class GestionUsuariosComponent implements OnInit {
   showSuccessEditUser() {
     this.messageService.add({ key: 'editSeccess', severity: 'success', summary: 'Usuario modificado', detail: 'Has modificado al usuario exitosamente' });
   }
-  showError(summary,detail) {
+  showError(summary, detail) {
     this.messageService.add({ key: 'errorEditUser', severity: 'error', summary: summary, detail: detail });
   }
 
