@@ -35,31 +35,39 @@ export class AppComponent {
         command: () => this.disableLink()
       },
       {
-        label: 'Crear PDF',
+        label: 'Documentos',
         icon: 'pi pi-file',
         routerLink: '/enter',
-        command: () => this.disableLink()
+        command: () => this.disableLink(),
+        items:[
+          {
+            label: 'Crear documento',
+            icon: 'pi pi-plus',
+            routerLink: '/enter',
+            command: () => this.disableLink()
+          },
+          {
+            label: 'Subir documento',
+            icon: 'pi pi-save',
+            routerLink: '/upload',
+            command: () => this.disableLink()
+          },
+          {
+            label: 'Listas',
+            icon: 'pi pi-list',
+            routerLink: '/list',
+            command: () => this.disableLink()
+          },
+        ]
       },
       {
-        label: 'Subir PDF',
-        icon: 'pi pi-save',
-        routerLink: '/upload',
-        command: () => this.disableLink()
-      },
-      {
-        label: 'Listas',
-        icon: 'pi pi-list',
-        routerLink: '/list',
-        command: () => this.disableLink()
-      },
-      {
-        label: 'Gestionar sistema de archivos',
+        label: 'Sistema de archivos',
         icon: 'pi pi-folder',
         routerLink: '/files',
         command: () => this.disableLink()
       },
       {
-        label: 'Gestionar usuarios',
+        label: 'Administrar usuarios',
         icon: 'pi pi-users',
         routerLink: '/users',
         command: () => this.disableLink()

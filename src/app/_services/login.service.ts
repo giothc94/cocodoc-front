@@ -3,6 +3,7 @@ import { CookieService } from "ngx-cookie-service";
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import * as Crypto from 'crypto-js';
 import { API_COCODOC } from '../../environments/environment.prod'
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: "root"
 })
@@ -26,22 +27,32 @@ export class LoginService {
             this.cookieService.delete('UTCocodoc')
             reject(error);
           })
-      }else{
+      } else {
         this.cookieService.delete('UDCocodoc')
         this.cookieService.delete('UTCocodoc')
-        reject({error:'No autenticado'});
+        reject({ error: 'No autenticado' });
       }
     })
+  }
+
+  public changePassword(newPassword): Observable<any> {
+    let r = this.decryptTokenCookie()
+    console.log('r',r)
+      return this.http.post(`${API_COCODOC.URL}change-password`, { newPassword: newPassword },{headers:this.setHeader('Bearer', r)})
   }
 
   public registerUser(user: string, password: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.http.post(`${this.URL}log-in`, {}, { headers: this.setHeader('Basic', null, user, password) }).toPromise()
         .then((resp: any) => {
-          this.encryptTokenCookie(resp.token);;
-          return this.http.get(`${API_COCODOC.URL}users/${resp.user.sub}`,{ headers: this.setHeader('Bearer', resp.token) }).toPromise();
+          this.encryptTokenCookie(resp.token);
+          if (resp.isNew) {
+            resolve({ isNew: resp.isNew })
+          } else {
+            return this.http.get(`${API_COCODOC.URL}users/${resp.user.sub}`, { headers: this.setHeader('Bearer', resp.token) }).toPromise();
+          }
         })
-        .then((user:any)=>{
+        .then((user: any) => {
           this.setCookieDateUser(user.User, true);
           resolve(user);
         })
@@ -61,38 +72,38 @@ export class LoginService {
     }
     return headers;
   }
-  public getHeaderAuthToken():HttpHeaders{
+  public getHeaderAuthToken(): HttpHeaders {
     let token = this.decryptTokenCookie();
     let authorizationData = 'Bearer ' + token;
-    let headers:HttpHeaders = new HttpHeaders({ 'Authorization': authorizationData });
+    let headers: HttpHeaders = new HttpHeaders({ 'Authorization': authorizationData });
     return headers;
   }
 
   private setCookieDateUser(user, isLogged) {
     let date: Date = new Date(new Date().getTime() + 2 * 1000 * 60 * 60);
     const cookieData = { user: user, isLogged: isLogged };
-    const cookie =  Crypto.AES.encrypt(JSON.stringify(cookieData), API_COCODOC.PUBLIC_API_KEY).toString()
-    this.cookieService.set('UDCocodoc',cookie ,date);
+    const cookie = Crypto.AES.encrypt(JSON.stringify(cookieData), API_COCODOC.PUBLIC_API_KEY).toString()
+    this.cookieService.set('UDCocodoc', cookie, date);
   }
   public getCookieDateUser(): string {
     return Crypto.AES.decrypt(this.cookieService.get('UDCocodoc'), API_COCODOC.PUBLIC_API_KEY).toString(Crypto.enc.Utf8) || null
   }
 
-  private encryptTokenCookie(userToken){
+  private encryptTokenCookie(userToken) {
     let date: Date = new Date(new Date().getTime() + 2 * 1000 * 60 * 60);
-    const userTokenEncrypt = Crypto.AES.encrypt(userToken,API_COCODOC.PUBLIC_API_KEY).toString();
+    const userTokenEncrypt = Crypto.AES.encrypt(userToken, API_COCODOC.PUBLIC_API_KEY).toString();
     this.cookieService.set('UTCocodoc', userTokenEncrypt, date);
   }
 
-  private decryptTokenCookie(){
-    return Crypto.AES.decrypt(this.cookieService.get('UTCocodoc'),API_COCODOC.PUBLIC_API_KEY).toString(Crypto.enc.Utf8) || null;
+  private decryptTokenCookie() {
+    return Crypto.AES.decrypt(this.cookieService.get('UTCocodoc'), API_COCODOC.PUBLIC_API_KEY).toString(Crypto.enc.Utf8) || null;
   }
 
-  public getToken(){
+  public getToken() {
     return this.decryptTokenCookie();
   }
 
-  public signOut():void{
+  public signOut(): void {
     this.cookieService.deleteAll();
   }
 }

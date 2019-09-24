@@ -37,6 +37,8 @@ import { LightboxModule } from 'primeng/lightbox';
 import { InputMaskModule } from 'primeng/inputmask';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import {MenubarModule} from 'primeng/menubar';
+import {TreeTableModule} from 'primeng/treetable';
 // fin primeng
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -47,6 +49,7 @@ import { ListasComponent } from './listas/listas.component';
 import { UserComponent } from './user/user.component';
 import { ArchivosComponent } from './archivos/archivos.component';
 import { GestionUsuariosComponent } from './gestion-usuarios/gestion-usuarios.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +60,8 @@ import { GestionUsuariosComponent } from './gestion-usuarios/gestion-usuarios.co
     ListasComponent,
     UserComponent,
     ArchivosComponent,
-    GestionUsuariosComponent
+    GestionUsuariosComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -93,6 +97,8 @@ import { GestionUsuariosComponent } from './gestion-usuarios/gestion-usuarios.co
     InputMaskModule,
     ProgressBarModule,
     SelectButtonModule,
+    MenubarModule,
+    TreeTableModule,
     //prettysize
     PrettySizeModule
   ],

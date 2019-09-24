@@ -36,9 +36,6 @@ export class ArchivosComponent implements OnInit {
   operationMessage: string
 
   constructor(private ds: DirectoryService, private readonly messageService: MessageService, private confirmationService: ConfirmationService) {
-    // this.formFiles = new FormGroup({
-    //   'nodo': new FormControl(null,Validators.required),
-    // });
   }
 
   generateDir(dir) {
@@ -116,28 +113,36 @@ export class ArchivosComponent implements OnInit {
   }
 
   createFolder() {
-    this.ds.createFolder({ key: this.nodoSelect.data, name: this.newFile })
-      .subscribe(resp => {
-        this.ngOnInit()
-        this.showSuccessCreateFolder()
-        // this.cancelCreateFolder()
-      }, ({ error }) => {
-        const { message, response } = error
-        const detail = response.message
-        this.showError(message, detail)
-        console.log('ERROR::!',error)
-      })
+    if (this.newFile) {
+      this.ds.createFolder({ destinationFolderCode: this.nodoSelect.data, nameFolder: this.newFile })
+        .subscribe(resp => {
+          this.ngOnInit()
+          this.showSuccessCreateFolder()
+          this.newFile = '';
+        }, ({error}) => {
+          let { message } = error.error
+          if(message.includes('fails to match')) message = 'No puede crear la carpeta con ese nombre.'
+          this.showError('No se creo la carpeta', message)
+        })
+    }else{
+      this.showError('Sin nombre.','Ingrese un nombre para la carpeta.')
+    }
   }
   renameFolder() {
-    // console.log({ key: this.nodoSelect.key, name: this.newFile })
-    this.ds.renameFolder({ key: this.nodoSelect.key, name: this.newFile,data:this.nodoSelect.data })
-      .subscribe(resp => {
-        this.cancelCreateFolder()
-        this.showSuccessRenameFolder()
-        this.ngOnInit()
-      }, (error) => {
-        this.showError('No se modifico la carpeta', 'Ocurrio un error al intentar modificar el nombre de la carpeta')
-      })
+    if (this.newFile) {
+      this.ds.renameFolder({ newNameFolder: this.newFile,idFolder:this.nodoSelect.data })
+        .subscribe(resp => {
+          this.cancelCreateFolder()
+          this.showSuccessRenameFolder()
+          this.ngOnInit()
+        }, 
+        ({error:{error:{message}}}) => {
+          if(message.includes('fails to match')) message = 'No puede crear la carpeta con ese nombre.'
+          this.showError('No se modifico la carpeta', message)
+        })
+    }else{
+      this.showError('No se modifico la carpeta', 'No a ingresado ningun nombre.')
+    }
   }
 
   cancelCreateFolder() {
@@ -175,19 +180,13 @@ export class ArchivosComponent implements OnInit {
       key: "confirmDelete",
       message: `Desea eliminar la carpeta ${this.nodoSelect.label}?`,
       accept: () => {
-        this.ds.deleteFolder({ id: this.nodoSelect.data })
+        this.ds.deleteFolder({ idFolder: this.nodoSelect.data })
           .subscribe((resp) => {
             this.ngOnInit()
             this.showSuccessDeleteFolder()
-          }, (err) => {
-            console.log(err)
-            const error = err.error.response.error
-            console.log(error)
-            if (error && error.code === 'ENOTEMPTY') {
-              this.showError('No se elimino la carpeta', 'La carpeta no esta vacia, solo puede eliminar carpetas vacias.')
-            }else{
-              this.showError('No se elimino la carpeta', 'No se pudo eliminar la carpeta')
-            }
+          }, 
+          ({error:{error:{message}}}) => {
+            this.showError('No se elimino la carpeta', message)
           })
       }
     });

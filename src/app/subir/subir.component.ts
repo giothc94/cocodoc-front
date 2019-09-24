@@ -17,6 +17,7 @@ import { HttpEventType } from '@angular/common/http';
 })
 export class SubirComponent implements OnInit {
   @ViewChild('filesClaer', { static: false }) filesClaer: ElementRef;
+  title = 'Subir documento'
   uploadedFiles: Array<any>;
   pdfCreate: FormGroup;
   files: Array<File>;
@@ -25,6 +26,7 @@ export class SubirComponent implements OnInit {
   BreadcrumFiles
   formData = new FormData()
   private progress;
+  invalidImages = []
 
   constructor(private ds: DirectoryService, private messageService: MessageService, private fb: FormBuilder, private PDF: FilesService, private prettySize: PrettySizeService) {
 
@@ -96,12 +98,18 @@ export class SubirComponent implements OnInit {
   }
 
   selecteds(event) {
+    this.invalidImages = []
     this.uploadedFiles = []
+    this.formData = new FormData();
     let { files } = event.target
     if (files) {
       for (const element of files) {
-        this.formData.append('images', element, element.name)
-        this.uploadedFiles.push({ name: element.name, size: this.prettySize.pretty(element.size), mimetype: element.type })
+        if (element.type === 'application/pdf') {
+          this.formData.append('pdf', element, element.name)
+          this.uploadedFiles.push({ name: element.name, size: this.prettySize.pretty(element.size), mimetype: element.type })
+        } else {
+          this.invalidImages.push(element.name)
+        }
       }
     }
   }
@@ -115,7 +123,7 @@ export class SubirComponent implements OnInit {
     }
   }
   guardarPDF() {
-    if (this.pdfCreate.valid && this.formData.get('images')) {
+    if (this.pdfCreate.valid && this.formData.get('pdf')) {
       let keys = Object.keys(this.pdfCreate.value)
       for (const key of keys) {
         if (key === 'keywords') {
@@ -126,20 +134,18 @@ export class SubirComponent implements OnInit {
           this.formData.set(key, this.pdfCreate.get(key).value)
         }
       }
-      this.formData.forEach((data, key) => console.log(key + ":" + data))
-      this.PDF.generatePdf(this.formData)
+      this.PDF.uploadPdf(this.formData)
         .subscribe(event => {
-          this.progress = event.loaded ? Math.floor(event.loaded * 100 / event.total) : 100;
+          if (event.type === 1 && event.loaded) {
+            this.progress = Math.floor(event.loaded * 100 / event.total);
+          }
           if (event.type === HttpEventType.Response) {
             this.showSuccessCreateDocument()
-            this.formData = new FormData()
-            this.pdfCreate.reset()
-            this.progress = null;
+            this.cancelarPDF()
           }
         }, error => {
-          this.uploadedFiles = null;
-          this.filesClaer.nativeElement.value = '';
-          this.showError('Documento existente', error.error.error.message)
+          this.cancelarPDF()
+          this.showError('Problema con el documento', error.error.error.message)
         })
     }
   }

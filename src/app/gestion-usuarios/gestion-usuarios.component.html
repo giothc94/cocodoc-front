@@ -1,110 +1,104 @@
-<div style="margin-top: 5%">
+<div class="col-12 mt-4 mb-5">
     <div class="p-grid">
-        <div class="p-col-12 p-justify-between">
-            <p-panel header="Gestion de usuarios del sistema">
-                <div class="p-grid">
-                    <p-toolbar class="p-col-12">
-                        <div class="ui-toolbar-group-left">
-                            <button pButton *ngIf="!btnEditUser && !userSelected" icon="pi pi-user-plus" type="button" class="ui-button ui-button-rounded ui-button-success" label="Crear usuario" (click)="actionCreateUser()" style="margin-right: .25em"></button>
-                        </div>
-                        <div class="ui-toolbar-group-right" *ngIf="userSelected">
-                            <button pButton icon="pi pi-pencil" type="button" class="ui-button ui-button-secondary" label="Modificar usuario" style="margin-right: .25em" *ngIf="!btnEditUser" (click)="editUser()"></button>
-                            <button pButton icon="pi pi-minus" type="button" class="ui-button ui-button-secondary" label="Eliminar usuario" style="margin-right: .25em" (click)="showConfirm()"></button>
-                            <button pButton type="button" label="Cancelar" icon="pi pi-times" class="ui-button ui-button-secondary" (click)="cancelForm()"></button>
-                        </div>
-                    </p-toolbar>
-                    <div class="p-offset-2 p-col-8">
-                        <div class="ui-inputgroup">
-                            <input type="text" pInputText [(ngModel)]="keyword" placeholder="Apellidos del usuario o numero de cédula.">
-                            <button pButton type="button" label="Buscar" (click)="searchDataUser()"></button>
-                            <button pButton type="button" icon="pi pi-refresh" (click)="ngOnInit()"></button>
-                        </div>
-                    </div>
-                    <div class="p-col-8 p-offset-2">
-                        <div class="p-grid">
-                            <div class="p-col">
-                                <p-listbox [options]="users" class="width" [(ngModel)]="userSelected" (onClick)="click($event)">
-                                    <p-header>
-                                        <span style="display: flex;justify-content: center;align-content: center;align-items: center;font-size: medium;">
+        <p-toolbar class="p-col-12">
+            <div class="ui-toolbar-group-left">
+                <button pButton *ngIf="!btnEditUser && !userSelected" icon="pi pi-user-plus" type="button" class="ui-button ui-button-success" label="Crear usuario" (click)="actionCreateUser()"></button>
+            </div>
+            <div class="ui-toolbar-group-right" *ngIf="userSelected">
+                <button pButton icon="pi pi-pencil" type="button" class="ui-button ui-button-secondary" label="Modificar usuario" style="margin-right: .25em" *ngIf="!btnEditUser" (click)="editUser()"></button>
+                <button pButton icon="pi pi-minus" type="button" class="ui-button ui-button-secondary" label="Eliminar usuario" style="margin-right: .25em" (click)="showConfirm()"></button>
+                <button pButton type="button" label="Cancelar" icon="pi pi-times" class="ui-button ui-button-secondary" (click)="cancelForm()"></button>
+            </div>
+        </p-toolbar>
+        <div class="p-offset-2 p-col-8">
+            <div class="ui-inputgroup">
+                <input type="text" pInputText [(ngModel)]="keyword" placeholder="Apellidos del usuario o numero de cédula.">
+                <button pButton type="button" label="Buscar" (click)="searchDataUser()"></button>
+                <button pButton type="button" icon="pi pi-refresh" (click)="ngOnInit()"></button>
+            </div>
+        </div>
+        <div class="p-col-8 p-offset-2">
+            <div class="p-grid">
+                <div class="p-col">
+                    <p-listbox [options]="users" class="width" [(ngModel)]="userSelected" (onClick)="click($event)">
+                        <p-header>
+                            <span style="display: flex;justify-content: center;align-content: center;align-items: center;font-size: medium;">
                                                 Lista de usuarios<i class="pi pi-user"></i>
                                             </span>
-                                        <p *ngIf="this.users.length < 1">Sin resultados.</p>
-                                    </p-header>
-                                </p-listbox>
-                            </div>
-                            <div class="p-col-4" *ngIf="userSelected">
-                                <div class="card p-3">
-                                    <small><strong>Nombre: </strong><br>{{ userSelected.nombre | titlecase }}</small>
-                                    <small><strong>  C.I : </strong>{{userSelected.cedula}}</small>
-                                    <small><strong>  Rol : </strong>{{userSelected.rol}}</small>
-                                </div>
-                            </div>
-                        </div>
+                            <p *ngIf="this.users.length < 1">Sin resultados.</p>
+                        </p-header>
+                    </p-listbox>
+                </div>
+                <div class="p-col-4" *ngIf="userSelected">
+                    <div class="card p-3">
+                        <small><strong>Nombre: </strong><br>{{ userSelected.nombre | titlecase }}</small>
+                        <small><strong>  C.I : </strong>{{userSelected.cedula}}</small>
+                        <small><strong>  Rol : </strong>{{userSelected.rol}}</small>
                     </div>
-                    <div class="p-offset-2 p-col-8" *ngIf="btnEditUser || btnCreateUser">
-                        <div class="card p-3">
-                            <div class="h6" *ngIf="btnEditUser">Modificar usuario</div>
-                            <div class="h6" *ngIf="btnCreateUser">Ingreso de usuarios</div>
-                            <form [formGroup]="updateUserForm" (ngSubmit)="saveUser()">
-                                <div class="p-grid">
-                                    <div class="p-col-12">
-                                        <span class="ui-float-label mt-4">
+                </div>
+            </div>
+        </div>
+        <div class="p-offset-2 p-col-8" *ngIf="btnEditUser || btnCreateUser">
+            <div class="card p-3">
+                <div class="h6" *ngIf="btnEditUser">Modificar usuario</div>
+                <div class="h6" *ngIf="btnCreateUser">Ingreso de usuarios</div>
+                <form [formGroup]="updateUserForm" (ngSubmit)="saveUser()">
+                    <div class="p-grid">
+                        <div class="p-col-12">
+                            <span class="ui-float-label mt-4">
                                             <input formControlName="cedula" autocomplete="off" id="float-input" class="form-control" type="text" pInputText>
                                             <label for="float-input">Cedula del usuario</label>
                                         </span>
-                                    </div>
-                                </div>
-                                <div class="p-grid">
-                                    <div class="p-col-6">
-                                        <span class="ui-float-label mt-4">
+                        </div>
+                    </div>
+                    <div class="p-grid">
+                        <div class="p-col-6">
+                            <span class="ui-float-label mt-4">
                                             <input formControlName="pNombre" autocomplete="off" id="float-input" class="form-control" type="text" pInputText>
                                             <label for="float-input">Primer nombre</label>
                                         </span>
-                                    </div>
-                                    <div class="p-col-6">
-                                        <span class="ui-float-label mt-4">
+                        </div>
+                        <div class="p-col-6">
+                            <span class="ui-float-label mt-4">
                                             <input formControlName="sNombre" autocomplete="off" id="float-input" class="form-control" type="text" pInputText>
                                             <label for="float-input">Segundo nombre</label>
                                         </span>
-                                    </div>
-                                </div>
-                                <div class="p-grid">
-                                    <div class="p-col-6">
-                                        <span class="ui-float-label mt-4">
+                        </div>
+                    </div>
+                    <div class="p-grid">
+                        <div class="p-col-6">
+                            <span class="ui-float-label mt-4">
                                             <input formControlName="pApellido" autocomplete="off" id="float-input" class="form-control" type="text" pInputText>
                                             <label for="float-input">Primer apellido</label>
                                         </span>
-                                    </div>
-                                    <div class="p-col-6">
-                                        <span class="ui-float-label mt-4">
+                        </div>
+                        <div class="p-col-6">
+                            <span class="ui-float-label mt-4">
                                             <input formControlName="sApellido" autocomplete="off" id="float-input" class="form-control" type="text" pInputText>
                                             <label for="float-input">Segundo apellido</label>
                                         </span>
-                                    </div>
-                                </div>
-                                <div class="p-grid">
-                                    <div class="p-col-12">
-                                        <span class="ui-float-label mt-4">
-                                            <p-dropdown formControlName="idRol" [options]="roles" placeholder="Selecciona el rol del usuario"></p-dropdown>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="p-grid">
-                                    <div class="p-offset-4 p-col-5">
-                                        <button pButton type="submit" *ngIf="updateUserForm.valid && btnCreateUser" label="Crear usuario" class="ui-button ui-button-rounded ui-button-primary" style="width: 100%"></button>
-                                    </div>
-                                    <div class="p-offset-7 p-col-5" *ngIf="updateUserForm.valid && btnEditUser">
-                                        <button pButton type="button" label="Modificar usuario" class="ui-button ui-button-rounded ui-button-primary" (click)="updateUser()" style="width: 100%"></button>
-                                    </div>
-                                    <div class="p-col-3">
-                                        <button pButton type="button" *ngIf="!btnEditUser || btnCreateUser" label="Cancelar" class="ui-button ui-button-rounded ui-button-secondary" (click)="cancelForm()" style="width: 100%"></button>
-                                    </div>
-                                </div>
-                            </form>
                         </div>
                     </div>
-                </div>
-            </p-panel>
+                    <div class="p-grid">
+                        <div class="p-col-12">
+                            <span class="ui-float-label mt-4">
+                                            <p-dropdown formControlName="idRol" [options]="roles" placeholder="Selecciona el rol del usuario"></p-dropdown>
+                                        </span>
+                        </div>
+                    </div>
+                    <div class="p-grid">
+                        <div class="p-offset-4 p-col-5">
+                            <button pButton type="submit" *ngIf="updateUserForm.valid && btnCreateUser" label="Crear usuario" class="ui-button ui-button-rounded ui-button-primary" style="width: 100%"></button>
+                        </div>
+                        <div class="p-offset-7 p-col-5" *ngIf="updateUserForm.valid && btnEditUser">
+                            <button pButton type="button" label="Modificar usuario" class="ui-button ui-button-rounded ui-button-primary" (click)="updateUser()" style="width: 100%"></button>
+                        </div>
+                        <div class="p-col-3">
+                            <button pButton type="button" *ngIf="!btnEditUser || btnCreateUser" label="Cancelar" class="ui-button ui-button-rounded ui-button-secondary" (click)="cancelForm()" style="width: 100%"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

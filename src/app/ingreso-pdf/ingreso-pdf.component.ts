@@ -7,6 +7,7 @@ import { FilesService } from '../_services/files/files.service';
 import { DirectoryService } from '../_services/directories/directory.service';
 import { TreeNode } from 'primeng/api';
 import { HttpEventType } from '@angular/common/http';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-ingreso-pdf',
@@ -16,6 +17,7 @@ import { HttpEventType } from '@angular/common/http';
 })
 export class IngresoPDFComponent implements OnInit {
   @ViewChild('filesClaer', { static: false }) filesClaer: ElementRef;
+  title = 'Ingreso de documentos'
   uploadedFiles: Array<any>;
   pdfCreate: FormGroup;
   files: Array<File>;
@@ -24,6 +26,7 @@ export class IngresoPDFComponent implements OnInit {
   BreadcrumFiles
   formData = new FormData()
   private progress;
+  invalidImages = []
 
   constructor(private ds: DirectoryService, private messageService: MessageService, private fb: FormBuilder, private PDF: FilesService, private prettySize: PrettySizeService) {
 
@@ -95,12 +98,18 @@ export class IngresoPDFComponent implements OnInit {
   }
 
   selecteds(event) {
+    this.invalidImages = []
     this.uploadedFiles = []
+    this.formData = new FormData();
     let { files } = event.target
     if (files) {
       for (const element of files) {
-        this.formData.append('images', element, element.name)
-        this.uploadedFiles.push({ name: element.name, size: this.prettySize.pretty(element.size), mimetype: element.type })
+        if (element.type.split('/').shift() === 'image') {
+          this.formData.append('images', element, element.name)
+          this.uploadedFiles.push({ name: element.name, size: this.prettySize.pretty(element.size), mimetype: element.type })
+        } else {
+          this.invalidImages.push(element.name)
+        }
       }
     }
   }
@@ -128,17 +137,16 @@ export class IngresoPDFComponent implements OnInit {
       this.formData.forEach((data, key) => console.log(key + ":" + data))
       this.PDF.generatePdf(this.formData)
         .subscribe(event => {
-          this.progress = event.loaded ? Math.floor(event.loaded * 100 / event.total) : 100;
+          if (event.type === 1 && event.loaded) {
+            this.progress = Math.floor(event.loaded * 100 / event.total);
+          }
           if (event.type === HttpEventType.Response) {
             this.showSuccessCreateDocument()
-            this.formData = new FormData()
-            this.pdfCreate.reset()
-            this.progress = null;
+            this.cancelarPDF()
           }
         }, error => {
-          this.uploadedFiles = null;
-          this.filesClaer.nativeElement.value = '';
-          this.showError('Documento existente', error.error.error.message)
+          this.cancelarPDF()
+          this.showError('Problema con el documento', error.error.error.message)
         })
     }
   }

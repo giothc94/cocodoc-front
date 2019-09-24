@@ -32,7 +32,13 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.loginService.registerUser(this.user.user, this.user.password)
-      .then(() => location.href = '/login')
+      .then((data) => {
+        if (data.isNew) {
+          location.href = '/change'          
+        }else{
+          location.href = '/login'
+        }
+      })
       .catch(error => {
         this.message = [];
         this.message.push({severity:'error', detail:error.error.error.message});
