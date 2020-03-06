@@ -37,7 +37,6 @@ export class AppComponent {
       {
         label: 'Documentos',
         icon: 'pi pi-file',
-        routerLink: '/enter',
         command: () => this.disableLink(),
         items:[
           {
@@ -79,7 +78,7 @@ export class AppComponent {
     this.menu.forEach(x => x.expanded = false)
   }
   signOut(){
+    console.log('SIGN_OuT')
     this.loginService.signOut();
-    location.href = '/login'
   }
 }

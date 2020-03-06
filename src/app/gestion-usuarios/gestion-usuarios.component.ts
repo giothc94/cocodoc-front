@@ -27,8 +27,9 @@ export class GestionUsuariosComponent implements OnInit {
   ngOnInit() {
     this.keyword = '';
     this.us.getRoles()
-      .subscribe(({ Response }) => {
-        Response.forEach(element => {
+      .subscribe(({ body }) => {
+        this.roles = []
+        body.forEach(element => {
           this.roles.push(
             {
               label: element.type_rol,
@@ -44,11 +45,12 @@ export class GestionUsuariosComponent implements OnInit {
       this.users = []
       this.us.searchDataUser({ keyword: this.keyword })
         .subscribe((resp:any) => {
-          const {Coincidences} = resp
-          if(Coincidences.length  < 1 ) this.users = [];
-          Coincidences.forEach(element => {
+          const {body} = resp
+          if(body.length  < 1 ) this.users = [];
+          body.forEach(element => {
+            console.log(element)
             this.users.push({
-              label: `${element.PrimerNombre} ${element.SegundoNombre} ${element.PrimerApellido} ${element.SegundoApellido}`,
+            label: `${element.Cédula} - ${element.PrimerNombre} ${element.SegundoNombre} ${element.PrimerApellido} ${element.SegundoApellido}`,
               value: {
                 id: element.Id,
                 cedula: element.Cédula,
@@ -61,6 +63,7 @@ export class GestionUsuariosComponent implements OnInit {
         },error=>{
         })
     }else{
+      this.getUsers();
       this.showError('Busqueda vacía','El campo de busqueda esta vacío.');
     }
   }
@@ -86,10 +89,10 @@ export class GestionUsuariosComponent implements OnInit {
     this.keyword = '';
     this.users = [];
     this.us.getUsers()
-      .subscribe(({ ListUsers }) => {
-        ListUsers.forEach(element => {
+      .subscribe(({body}) => {
+        body.forEach(element => {
           this.users.push({
-            label: `${element.PrimerNombre} ${element.SegundoNombre} ${element.PrimerApellido} ${element.SegundoApellido}`,
+            label: `${element.Cédula} - ${element.PrimerNombre} ${element.SegundoNombre} ${element.PrimerApellido} ${element.SegundoApellido}`,
             value: {
               id: element.Id,
               cedula: element.Cédula,
@@ -122,9 +125,9 @@ export class GestionUsuariosComponent implements OnInit {
   editUser() {
     let _id = this.dataUserSelected.id
     this.us.getUser(_id)
-      .subscribe(({ User }) => {
-        this.setForm(User)
-        this.updateUserForm.addControl('id', new FormControl(User.Id, [Validators.required, Validators.pattern('^[0-9]+$')]))
+      .subscribe(({body}) => {
+        this.setForm(body)
+        this.updateUserForm.addControl('id', new FormControl(body.Id, [Validators.required, Validators.pattern('^[0-9]+$')]))
         this.btnEditUser = true
       })
   }
@@ -134,7 +137,7 @@ export class GestionUsuariosComponent implements OnInit {
     if (status === 'VALID') {
       this.us.updateUser(value)
         .subscribe(resp => {
-          if (resp.Ok) {
+          if (resp.status === 200) {
             this.updateUserForm.reset()
             this.getUsers()
             this.showSuccessEditUser()
@@ -168,7 +171,7 @@ export class GestionUsuariosComponent implements OnInit {
   confirmDelete() {
     this.us.deleteUser(this.dataUserSelected.id)
       .subscribe(result => {
-        if (result.Ok) {
+        if (result.status === 200) {
           this.userSelected = ''
           this.messageService.clear();
           this.showSuccessDeleteUser()

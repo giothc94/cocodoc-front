@@ -1,3 +1,8 @@
-.test {
-    color: red;
+.ui-treetable .ui-treetable-toggler {
+    cursor: pointer;
+    display: inline-block;
+    height: 1em;
+    position: absolute;
+    top: 70%;
+    margin-top: -.5em;
 }

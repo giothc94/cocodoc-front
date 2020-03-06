@@ -15,6 +15,7 @@ export class UserComponent implements OnInit {
     private loginService: LoginService
   ) {
     this._userDate = JSON.parse(this.loginService.getCookieDateUser());
+    console.log('DATA',this._userDate)
   }
 
   ngOnInit() {

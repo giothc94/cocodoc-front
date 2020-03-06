@@ -1,141 +1,324 @@
 <div class="p-grid m-5">
-    <div class="p-col-12">
-        <div class="ui-g-12 ui-md-4">
-            <div class="ui-inputgroup">
-                <input type="text" pInputText [(ngModel)]="keyword" placeholder="Nombre del documento, palabras clave, persona reponsable,fecha de creacion">
-                <button pButton type="button" label="Buscar" icon="pi pi-search" (click)="searchPdf()"></button>
-                <button pButton type="button" icon="pi pi-refresh" (click)="ngOnInit()"></button>
-            </div>
-        </div>
+  <div class="p-col-12">
+    <div class="ui-g-12 ui-md-4">
+      <div class="ui-inputgroup">
+        <input
+          type="text"
+          pInputText
+          [(ngModel)]="keyword"
+          placeholder="Nombre del documento, palabras clave, persona reponsable,fecha de creacion"
+          (keyup)="searchPdf()"
+        />
+        <button
+          pButton
+          type="button"
+          icon="pi pi-refresh"
+          (click)="ngOnInit()"
+        ></button>
+      </div>
     </div>
+  </div>
 
-    <div class="p-col-12">
-        <div class="card p-3" *ngIf="resultSearch.length > 0" style="max-height: 300px;overflow: scroll">
-            <table style="word-break: break-all">
-                <tr *ngFor="let element of resultSearch">
-                    <td>
-                        <small><strong>Nombre del documento: </strong>{{element.nameFile}}</small><br>
-                        <div class="pl-3"><i><small style="color: gray;">{{element.content.toString()}}</small></i></div>
-                    </td>
-                    <td><button pButton icon="pi pi-download" (click)="downloadFile(element.idDoc)"></button></td>
-                </tr>
+  <div class="p-col-12">
+    <div
+      class="card p-3"
+      *ngIf="resultSearch.length > 0"
+      style="max-height: 300px;overflow: scroll"
+    >
+      <table style="word-break: break-all">
+        <tr *ngFor="let element of resultSearch">
+          <td>
+            <small
+              ><strong>Nombre del documento: </strong
+              >{{ element.nameFile }}</small
+            ><br />
+            <div class="pl-3">
+              <i
+                ><small style="color: gray;">{{
+                  element.content.toString()
+                }}</small></i
+              >
+            </div>
+          </td>
+          <td>
+            <button
+              (click)="nodoSelectF(element.idDoc)"
+              pButton
+              type="button"
+              icon="pi pi-eye"
+              class="ui-button-success"
+            ></button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="p-col-12" *ngIf="resultSearch.length == 0">
+    <p-treeTable [value]="files">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 300px;word-break: break-all;text-align: center">
+            Nombre
+          </th>
+          <th style="width: 100px;text-align: center">Tipo</th>
+          <th style="text-align: center">Info</th>
+          <th style="width: 100px;word-break: break-all;text-align: center;">
+            Tamaño
+          </th>
+          <th
+            style="width: 50px;word-break: break-all;text-align: center;"
+          ></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+        <tr>
+          <td>
+            <div class="d-flex">
+              <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+              <!-- <div style="word-break: break-all;display: block;width: 80%;margin: auto 54.5px;"> -->
+              <div>
+                {{ rowData.Name | titlecase }}
+              </div>
+            </div>
+          </td>
+          <td align="center">{{ rowData.Type }}</td>
+          <td style="word-break: break-word;">
+            <div class="m-2 d-flex flex-column">
+              <small><strong>Nombre: </strong>{{ rowData.Name }}</small>
+              <small><strong>Path: </strong>{{ rowData.Path }}</small>
+            </div>
+          </td>
+          <td align="center">{{ rowData.Size }}</td>
+          <td align="center">
+            <button
+              *ngIf="rowData.Type != 'directory'"
+              (click)="nodoSelectF(rowData.Code)"
+              pButton
+              type="button"
+              icon="pi pi-eye"
+              class="ui-button-success"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-treeTable>
+  </div>
+  <div
+    class="p-col-12"
+    *ngIf="src"
+    style="height: 800px; max-height: 800px !important"
+  >
+    <div class="card p-3 mb-3">
+      <div class="h6">Datos del documento</div>
+      <div class="container">
+        <div class="row">
+          <div class="col-6">
+            <table style="word-break: break-word;">
+              <tr>
+                <td
+                  align="right"
+                  style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"
+                >
+                  <small><strong>ID:</strong></small>
+                </td>
+                <td style="padding-left: 10px;">
+                  <small>{{ cardPdf.idDoc }}</small>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  align="right"
+                  style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"
+                >
+                  <small><strong>TITULO:</strong></small>
+                </td>
+                <td style="padding-left: 10px;">
+                  <small>{{ cardPdf.title | uppercase }}</small>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  align="right"
+                  style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"
+                >
+                  <small><strong>ASUNTO:</strong></small>
+                </td>
+                <td style="padding-left: 10px;">
+                  <small>{{ cardPdf.subject | uppercase }}</small>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  align="right"
+                  style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"
+                >
+                  <small><strong>EMISOR:</strong></small>
+                </td>
+                <td style="padding-left: 10px;">
+                  <small>{{ cardPdf.issuingEntity | uppercase }}</small>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  align="right"
+                  style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"
+                >
+                  <small><strong>RECEPTOR:</strong></small>
+                </td>
+                <td style="padding-left: 10px;">
+                  <small>{{ cardPdf.receivingEntity | uppercase }}</small>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  align="right"
+                  style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"
+                >
+                  <small><strong>FECHA DE EMISION:</strong></small>
+                </td>
+                <td style="padding-left: 10px;">
+                  <small>{{ cardPdf.broadcastDate | date: shortDate }}</small>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  align="right"
+                  style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"
+                >
+                  <small><strong>FECHA DE RECEPCION:</strong></small>
+                </td>
+                <td style="padding-left: 10px;">
+                  <small>{{ cardPdf.receptionDate | date: shortDate }}</small>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  align="right"
+                  style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"
+                >
+                  <small><strong>COMENTARIO DEL DOCUMENTO:</strong></small>
+                </td>
+                <td style="padding-left: 10px;">
+                  <small>{{ cardPdf.comment | uppercase }}</small>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  align="right"
+                  style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"
+                >
+                  <small><strong>OBSERVACION:</strong></small>
+                </td>
+                <td style="padding-left: 10px;">
+                  <small>{{
+                    cardPdf.responsibleObservation | uppercase
+                  }}</small>
+                </td>
+              </tr>
             </table>
+          </div>
+          <div class="col-6">
+            <table style="word-break: break-word;">
+              <tr>
+                <td
+                  align="right"
+                  style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"
+                >
+                  <small><strong>NOMBRE DEL DOCUMENTO:</strong></small>
+                </td>
+                <td style="padding-left: 10px;">
+                  <small>{{ cardPdf.nameDocument | uppercase }}</small>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  align="right"
+                  style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"
+                >
+                  <small
+                    ><strong
+                      >NUMERO DE HOJAS DEL DOCUMENTO ORIGINAL:</strong
+                    ></small
+                  >
+                </td>
+                <td style="padding-left: 10px;">
+                  <small>{{ cardPdf.numberOfSheetsOriginalDocument }}</small>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  align="right"
+                  style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"
+                >
+                  <small><strong>SEGMENTO:</strong></small>
+                </td>
+                <td style="padding-left: 10px;">
+                  <small>{{ cardPdf.segment }}</small>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  align="right"
+                  style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"
+                >
+                  <small><strong>UBICACION:</strong></small>
+                </td>
+                <td style="padding-left: 10px;">
+                  <small>{{ cardPdf.location }}</small>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  align="right"
+                  style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"
+                >
+                  <small><strong>REGISTRADO POR:</strong></small>
+                </td>
+                <td style="padding-left: 10px;">
+                  <small>{{ cardPdf.createdBy | uppercase }}</small>
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
+        <div class="d-flex justify-content-end pb-1">
+          <button
+            (click)="downloadFile(cardPdf.idDoc, cardPdf.title)"
+            pButton
+            type="button"
+            icon="pi pi-download"
+            class="ui-button-success mr-1"
+            label="Descargar"
+          ></button>
+          <button
+            (click)="confirmDelete(cardPdf.idDoc)"
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            class="ui-button-danger mr-1"
+            label="Eliminar"
+          ></button>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-times"
+            (click)="clearDataDocument()"
+            class="ui-button-warning"
+            label="Cerrar"
+          ></button>
+        </div>
+      </div>
     </div>
 
-    <div class="p-col-12" *ngIf="resultSearch.length == 0">
-        <p-treeTable [value]="files">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th style="width: 300px;word-break: break-all;text-align: center">Nombre</th>
-                    <th style="width: 100px;text-align: center">Tipo</th>
-                    <th style="text-align: center">Info</th>
-                    <th style="width: 100px;word-break: break-all;text-align: center;">Tamaño</th>
-                    <th style="width: 50px;word-break: break-all;text-align: center;"></th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
-                <tr>
-                    <td>
-                        <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-                        <div style="word-break: break-all;display: block;width: 80%;margin: auto 54.5px;">{{rowData.Name}}</div>
-                    </td>
-                    <td align="center">{{rowData.Type | titlecase}} </td>
-                    <td style="word-break: break-word;">
-                        <div class="m-2">
-                            <small><strong>Nombre: </strong>{{rowData.Name}}</small><br>
-                            <small><strong>Path: </strong>{{rowData.Path}}</small><br>
-                        </div>
-                    </td>
-                    <td align="center">{{rowData.Size}}</td>
-                    <td align="center">
-                        <button *ngIf="rowData.Type != 'directory'" (click)="nodoSelectF(rowData.Code)" pButton type="button" icon="pi pi-download" class="ui-button-success"></button>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-treeTable>
-    </div>
-    <div class="p-col-12" *ngIf="src" style="height: 800px; max-height: 800px !important">
-        <div class="d-flex justify-content-end pb-1">
-            <button (click)="confirmDelete(cardPdf.idDoc)" pButton type="button" icon="pi pi-trash" class="ui-button-danger mr-1"></button>
-            <button pButton type="button" icon="pi pi-times" (click)="clearDataDocument()" class="ui-button-warning"></button>
-        </div>
-        <div class="card p-3 mb-3">
-            <div class="h6">Datos del documento</div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-6">
-                        <table style="word-break: break-word;">
-                            <tr>
-                                <td align="right" style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"><small><strong>ID:</strong></small></td>
-                                <td style="padding-left: 10px;"><small>{{cardPdf.idDoc}}</small></td>
-                            </tr>
-                            <tr>
-                                <td align="right" style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"><small><strong>TITULO:</strong></small></td>
-                                <td style="padding-left: 10px;"><small>{{cardPdf.title | uppercase}}</small></td>
-                            </tr>
-                            <tr>
-                                <td align="right" style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"><small><strong>ASUNTO:</strong></small></td>
-                                <td style="padding-left: 10px;"><small>{{cardPdf.subject | uppercase}}</small></td>
-                            </tr>
-                            <tr>
-                                <td align="right" style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"><small><strong>EMISOR:</strong></small></td>
-                                <td style="padding-left: 10px;"><small>{{cardPdf.issuingEntity | uppercase}}</small></td>
-                            </tr>
-                            <tr>
-                                <td align="right" style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"><small><strong>RECEPTOR:</strong></small></td>
-                                <td style="padding-left: 10px;"><small>{{cardPdf.receivingEntity | uppercase}}</small></td>
-                            </tr>
-                            <tr>
-                                <td align="right" style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"><small><strong>FECHA DE EMISION:</strong></small></td>
-                                <td style="padding-left: 10px;"><small>{{cardPdf.broadcastDate | date:shortDate}}</small></td>
-                            </tr>
-                            <tr>
-                                <td align="right" style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"><small><strong>FECHA DE RECEPCION:</strong></small></td>
-                                <td style="padding-left: 10px;"><small>{{cardPdf.receptionDate | date:shortDate}}</small></td>
-                            </tr>
-                            <tr>
-                                <td align="right" style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"><small><strong>COMENTARIO DEL DOCUMENTO:</strong></small></td>
-                                <td style="padding-left: 10px;"><small>{{cardPdf.comment | uppercase}}</small></td>
-                            </tr>
-                            <tr>
-                                <td align="right" style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"><small><strong>OBSERVACION:</strong></small></td>
-                                <td style="padding-left: 10px;"><small>{{cardPdf.responsibleObservation | uppercase}}</small></td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="col-6">
-                        <table style="word-break: break-word;">
-                            <tr>
-                                <td align="right" style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"><small><strong>NOMBRE DEL DOCUMENTO:</strong></small></td>
-                                <td style="padding-left: 10px;"><small>{{cardPdf.nameDocument | uppercase}}</small></td>
-                            </tr>
-                            <tr>
-                                <td align="right" style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"><small><strong>NUMERO DE HOJAS DEL DOCUMENTO ORIGINAL:</strong></small>
-                                </td>
-                                <td style="padding-left: 10px;"><small>{{cardPdf.numberOfSheetsOriginalDocument}}</small></td>
-                            </tr>
-                            <tr>
-                                <td align="right" style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"><small><strong>SEGMENTO:</strong></small></td>
-                                <td style="padding-left: 10px;"><small>{{cardPdf.segment}}</small></td>
-                            </tr>
-                            <tr>
-                                <td align="right" style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"><small><strong>UBICACION:</strong></small></td>
-                                <td style="padding-left: 10px;"><small>{{cardPdf.location}}</small></td>
-                            </tr>
-                            <tr>
-                                <td align="right" style="width: 150px;padding-right: 10px;background: grey;border-bottom: 2px solid white; color: white"><small><strong>REGISTRADO POR:</strong></small></td>
-                                <td style="padding-left: 10px;"><small>{{cardPdf.createdBy | uppercase}}</small></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <embed [src]="src" type="application/pdf" width="100%" height="100%">
-    </div>
+    <embed [src]="src" type="application/pdf" width="100%" height="100%" />
+  </div>
 </div>
 
-<p-toast key="error" [style]="{marginTop: '80px'}"></p-toast>
-<p-toast key="success" [style]="{marginTop: '80px'}"></p-toast>
-<p-confirmDialog key="confirmDelete" header="Eliminar documento" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-toast key="error" [style]="{ marginTop: '80px' }"></p-toast>
+<p-toast key="success" [style]="{ marginTop: '80px' }"></p-toast>
+<p-confirmDialog
+  key="confirmDelete"
+  header="Eliminar documento"
+  icon="pi pi-exclamation-triangle"
+></p-confirmDialog>

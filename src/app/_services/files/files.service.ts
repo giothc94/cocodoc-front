@@ -21,6 +21,9 @@ export class FilesService {
   getDocument(id:Number):Observable<any>{
     return this.http.get(`http://localhost:8000/api/files/search/${id}`,{headers:this.header,responseType:"arraybuffer"})
   }
+  downloadDocument(id:Number):Observable<any>{
+    return this.http.get(`http://localhost:8000/api/files/search/${id}/download`,{headers:this.header,responseType:"blob"})
+  }
   searchDocument({query,queryParam}):Observable<any>{
     return this.http.get(`http://localhost:8000/api/files/search?query=${query}&queryParam=${queryParam}`,{headers:this.header})
   }

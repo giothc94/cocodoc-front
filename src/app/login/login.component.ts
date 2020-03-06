@@ -3,7 +3,6 @@ import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
 import { LoginService } from '../_services/login.service';
 import { MessageService, Message } from 'primeng/components/common/api';
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -40,8 +39,9 @@ export class LoginComponent implements OnInit {
         }
       })
       .catch(error => {
+        console.log('Error:: ',error)
         this.message = [];
-        this.message.push({severity:'error', detail:error.error.error.message});
+        this.message.push({severity:'error', detail:'Error al tratar de comunicarnos con el servidor.'});
         this.user.user = ''
         this.user.password = ''
         setTimeout(() => {

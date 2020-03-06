@@ -1,167 +1,380 @@
 <div class="mt-3 p-offset-2 p-col-8">
-    <div class="card p-3">
-        <div class="h5">{{title}}</div>
-        <form [formGroup]="pdfCreate" (ngSubmit)="guardarPDF()">
-            <div class="p-grid">
-                <div class="p-col-12">
-                    <div class="p-grid">
-                        <div class="p-col-6">
-                            <span class="ui-float-label mt-2">
-                                    <input formControlName="title" id="float-input" class="form-control" type="text"
-                                        pInputText pTooltip="Ingrese un titulo descriptivo para el PDF" tooltipEvent="focus"
-                                        autocomplete="off">
-                                    <label for="float-input">Titulo del documento</label>
-                                </span>
-                            <small *ngIf="!pdfCreate.controls['title'].valid && pdfCreate.controls['title'].dirty" style="font-size: 10px" class="text-danger text-monospace">* Entrada no valida</small>
-                        </div>
-                        <div class="p-col-6">
-                            <span class="ui-float-label mt-2">
-                                    <input formControlName="subject" id="float-input" class="form-control" type="text"
-                                        pInputText pTooltip="Ingresa el asunto del documento Ej. Oficio, Certificado"
-                                        tooltipEvent="focus" autocomplete="off">
-                                    <label for="float-input">Asunto</label>
-                                </span>
-                            <small *ngIf="!pdfCreate.controls['subject'].valid && pdfCreate.controls['subject'].dirty" style="font-size: 10px" class="text-danger text-monospace">* Entrada no valida</small>
-                        </div>
-                        <div class="p-col-12">
-                            <span class="ui-float-label mt-2">
-                                    <textarea rows="1" cols="30" pInputTextarea autoResize="autoResize"
-                                        formControlName="comment" id="float-input"
-                                        pTooltip="Ingresa un comentario descriptivo del documento, trata de ser lo mas claro posible."
-                                        tooltipEvent="focus" autocomplete="off"></textarea>
-                                    <label for="float-input">Comentario del documento</label>
-                                </span>
-                            <small *ngIf="!pdfCreate.controls['comment'].valid && pdfCreate.controls['comment'].dirty" style="font-size: 10px" class="text-danger text-monospace">* Entrada no valida</small>
-                        </div>
-                        <div class="p-col-6">
-                            <span class="ui-float-label mt-2">
-                                    <p-calendar formControlName="broadcastDate" dateFormat="D M dd yy"
-                                        [monthNavigator]="true" [yearNavigator]="true" yearRange="1800:2030"
-                                        pTooltip="Selecciona la fecha en la que se emitio el documento."
-                                        tooltipEvent="hover" autocomplete="off"></p-calendar>
-                                    <label for="float-input">Fecha de emision del documento</label>
-                                </span>
-                            <small *ngIf="!pdfCreate.controls['broadcastDate'].valid && pdfCreate.controls['broadcastDate'].dirty" style="font-size: 10px" class="text-danger text-monospace">* Entrada no valida</small>
-                        </div>
-                        <div class="p-col-6">
-                            <span class="ui-float-label mt-2">
-                                    <p-calendar formControlName="receptionDate" dateFormat="D M dd yy"
-                                        [monthNavigator]="true" [yearNavigator]="true" yearRange="1800:2030"
-                                        pTooltip="Selecciona la fecha en la que se recepto el documento."
-                                        tooltipEvent="hover" autocomplete="off"></p-calendar>
-                                    <label for="float-input">Fecha de recepcion del documento</label>
-                                </span>
-                            <small *ngIf="!pdfCreate.controls['receptionDate'].valid && pdfCreate.controls['receptionDate'].dirty" style="font-size: 10px" class="text-danger text-monospace">* Entrada no valida</small>
-                        </div>
-                        <div class="p-col-6">
-                            <span class="ui-float-label mt-2">
-                                    <input formControlName="issuingEntity" id="float-input" class="form-control" type="text"
-                                        pInputText pTooltip="Ingresa el nombre de la entidad que emite el documento"
-                                        tooltipEvent="focus" autocomplete="off">
-                                    <label for="float-input">Nombre del emisor</label>
-                                </span>
-                            <small *ngIf="!pdfCreate.controls['issuingEntity'].valid && pdfCreate.controls['issuingEntity'].dirty" style="font-size: 10px" class="text-danger text-monospace">* Entrada no valida</small>
-                        </div>
-                        <div class="p-col-6">
-                            <span class="ui-float-label mt-2">
-                                    <input formControlName="receivingEntity" id="float-input" class="form-control"
-                                        type="text" pInputText
-                                        pTooltip="Ingresa el nombre de la entidad que recepta el documento"
-                                        tooltipEvent="focus" autocomplete="off">
-                                    <label for="float-input">Nombre del receptor</label>
-                                </span>
-                            <small *ngIf="!pdfCreate.controls['receivingEntity'].valid && pdfCreate.controls['receivingEntity'].dirty" style="font-size: 10px" class="text-danger text-monospace">* Entrada no valida</small>
-                        </div>
-                        <div class="p-col-6">
-                            <span class="ui-float-label mt-2">
-                                    <input formControlName="numberOfSheetsOriginalDocument" id="float-input"
-                                        class="form-control" type="text" pInputText
-                                        pTooltip="Ingresa la cantidad de hojas del documento" tooltipEvent="focus"
-                                        autocomplete="off">
-                                    <label for="float-input">Numero de hojas del documento</label>
-                                </span>
-                            <small *ngIf="!pdfCreate.controls['numberOfSheetsOriginalDocument'].valid && pdfCreate.controls['numberOfSheetsOriginalDocument'].dirty" style="font-size: 10px" class="text-danger text-monospace">* Entrada no valida</small>
-                        </div>
-                        <div class="p-col-6">
-                            <span class="ui-float-label mt-2">
-                                    <p-inputMask formControlName="segment" id="float-input" mask="99-99"
-                                        pTooltip="Ingresa la numeracion del documento. Ej. 02-05, que es igual a (Hojas del 02 al 05)"
-                                        tooltipEvent="hover"></p-inputMask>
-                                    <label for="float-input">Segmento numerico del documento</label>
-                                </span>
-                            <small *ngIf="!pdfCreate.controls['segment'].valid && pdfCreate.controls['segment'].dirty" style="font-size: 10px" class="text-danger text-monospace">* Entrada no valida</small>
-                        </div>
-                        <div class="p-col-12">
-                            <span class="ui-float-label mt-2">
-                                    <textarea rows="1" cols="30" pInputTextarea autoResize="autoResize"
-                                        formControlName="responsibleObservation" id="float-input"
-                                        pTooltip="Ingresa alguna observacion que tengas que hacer con respecto al documento."
-                                        tooltipEvent="focus" autocomplete="off"></textarea>
-                                    <label for="float-input">Observacion de encargado (Opcional)</label>
-                                </span>
-                            <small *ngIf="!pdfCreate.controls['responsibleObservation'].valid && pdfCreate.controls['responsibleObservation'].dirty" style="font-size: 10px" class="text-danger text-monospace">* Entrada no valida</small>
-                        </div>
-                        <div class="p-col-12">
-                            <span class="ui-float-label mt-2">
-                                    <p-chips formControlName="keywords"
-                                        placeholder="Información extra, presiona enter despues de cada dato."
-                                        pTooltip="Ingresa palabras clave del documento que permitan identificarlo. Ej: oficio, potabilizacion, cabildo."
-                                        tooltipPosition="top" tooltipEvent="hover"></p-chips>
-                                </span>
-                            <small *ngIf="!pdfCreate.controls['keywords'].valid" style="font-size: 10px" class="text-danger text-monospace">* Entrada no valida</small>
-                        </div>
-                        <div class="p-col-12">
-                            <span class="ui-float-label">
-                                    <span style="color: #898989;">Seleccione en donde guardar el PDF: </span><span class="text-success">{{BreadcrumFiles}} </span>
-                            <i class="pi pi-refresh" style="cursor: pointer;display: flex;justify-content: flex-end;" (click)="loadDirectory()"></i>
-                            </span>
-                            <p-tree [value]="files" layout="horizontal" selectionMode="single" [(selection)]="nodoSelect" (onNodeSelect)="nodoSelectF($event)"></p-tree>
-                            <small *ngIf="!pdfCreate.controls['idFolder'].valid" style="font-size: 10px" class="text-danger text-monospace">* Selecciona una carpeta</small>
-                        </div>
-                        <div class="p-col-12">
-                            <span class="ui-float-label">
-                                    <input id="float-input" type="file" accept="application/pdf" #filesClaer
-                                        (change)="selecteds($event)"
-                                        pTooltip="Selecciona el documento." tooltipEvent="hover">
-                                </span>
-                            <small *ngIf="!formData.has('images')" style="font-size: 10px" class="text-danger text-monospace">* Selecciona el pdf</small>
-                            <div *ngIf="invalidImages.length > 0" class="d-flex p-2">
-                                <small style="font-size: 10px" class="text-danger text-monospace">Estos archivos no se
-                                        agregaran:</small>
-                                <small class="text-danger">
-                                        <ul style="list-style: none;padding: 0px 30px;line-height: 1;">
-                                            <li *ngFor="let element of invalidImages">{{element}}</li>
-                                        </ul>
-                                    </small>
-                            </div>
-                            <div *ngIf="uploadedFiles" style="max-height: 400px; overflow-y: scroll; margin-top: 10px;">
-                                <div *ngFor="let file of uploadedFiles" class="card p-2 mb-2 d-flex flex-row justify-content-around">
-                                    <div>
-                                        <i class="pi pi-file" style="font-size: 40px;"></i>
-                                    </div>
-                                    <div class="d-flex flex-column justify-content-center">
-                                        <small><strong>Nombre:</strong> {{file.name.substring(0,50)+'...'}}</small>
-                                        <small><strong>Tamaño:</strong> {{file.size}}</small>
-                                        <small><strong>Tipo:</strong> {{file.mimetype}}</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <div class="p-3">
+    <div class="h5">{{ title }}</div>
+    <form [formGroup]="pdfCreate" (ngSubmit)="guardarPDF()" class="mt-5 mb-5">
+      <div class="p-grid">
+        <div class="p-col-12">
+          <div class="p-grid">
+            <div class="p-col-6">
+              <span class="ui-float-label mt-2">
+                <input
+                  formControlName="title"
+                  id="float-input"
+                  class="form-control"
+                  type="text"
+                  pInputText
+                  pTooltip="Ingrese un titulo descriptivo para el PDF"
+                  tooltipEvent="focus"
+                  autocomplete="off"
+                />
+                <label for="float-input">Titulo del documento</label>
+              </span>
+              <small
+                *ngIf="
+                  !pdfCreate.controls['title'].valid &&
+                  pdfCreate.controls['title'].dirty
+                "
+                style="font-size: 10px"
+                class="text-danger text-monospace"
+                >* Entrada no valida</small
+              >
             </div>
-            <p-progressBar *ngIf="progress" [value]="progress"></p-progressBar>
-            <div class="p-grid">
-                <div *ngIf="pdfCreate.valid && uploadedFiles" class="p-offset-3 p-col-6">
-                    <button pButton type="submit" label="Guardar documento" class="ui-button ui-button-rounded ui-button-success" style="width: 100%"></button>
-                </div>
-                <div class="p-col-3">
-                    <button pButton type="button" label="Cancelar" class="ui-button ui-button-rounded ui-button-secondary" style="width: 100%" (click)="cancelarPDF()"></button>
-                </div>
+            <div class="p-col-6">
+              <span class="ui-float-label mt-2">
+                <input
+                  formControlName="subject"
+                  id="float-input"
+                  class="form-control"
+                  type="text"
+                  pInputText
+                  pTooltip="Ingresa el asunto del documento Ej. Oficio, Certificado"
+                  tooltipEvent="focus"
+                  autocomplete="off"
+                />
+                <label for="float-input">Asunto</label>
+              </span>
+              <small
+                *ngIf="
+                  !pdfCreate.controls['subject'].valid &&
+                  pdfCreate.controls['subject'].dirty
+                "
+                style="font-size: 10px"
+                class="text-danger text-monospace"
+                >* Entrada no valida</small
+              >
             </div>
-        </form>
-    </div>
+            <div class="p-col-12">
+              <span class="ui-float-label mt-2">
+                <textarea
+                  rows="1"
+                  cols="30"
+                  pInputTextarea
+                  autoResize="autoResize"
+                  formControlName="comment"
+                  id="float-input"
+                  pTooltip="Ingresa un comentario descriptivo del documento, trata de ser lo mas claro posible."
+                  tooltipEvent="focus"
+                  autocomplete="off"
+                ></textarea>
+                <label for="float-input">Comentario del documento</label>
+              </span>
+              <small
+                *ngIf="
+                  !pdfCreate.controls['comment'].valid &&
+                  pdfCreate.controls['comment'].dirty
+                "
+                style="font-size: 10px"
+                class="text-danger text-monospace"
+                >* Entrada no valida</small
+              >
+            </div>
+            <div class="p-col-6">
+              <span class="ui-float-label mt-2">
+                <p-calendar
+                  formControlName="broadcastDate"
+                  dateFormat="D M dd yy"
+                  [monthNavigator]="true"
+                  [yearNavigator]="true"
+                  yearRange="1800:2030"
+                  pTooltip="Selecciona la fecha en la que se emitio el documento."
+                  tooltipEvent="hover"
+                  autocomplete="off"
+                ></p-calendar>
+                <label for="float-input">Fecha de emision del documento</label>
+              </span>
+              <small
+                *ngIf="
+                  !pdfCreate.controls['broadcastDate'].valid &&
+                  pdfCreate.controls['broadcastDate'].dirty
+                "
+                style="font-size: 10px"
+                class="text-danger text-monospace"
+                >* Entrada no valida</small
+              >
+            </div>
+            <div class="p-col-6">
+              <span class="ui-float-label mt-2">
+                <p-calendar
+                  formControlName="receptionDate"
+                  dateFormat="D M dd yy"
+                  [monthNavigator]="true"
+                  [yearNavigator]="true"
+                  yearRange="1800:2030"
+                  pTooltip="Selecciona la fecha en la que se recepto el documento."
+                  tooltipEvent="hover"
+                  autocomplete="off"
+                ></p-calendar>
+                <label for="float-input"
+                  >Fecha de recepcion del documento</label
+                >
+              </span>
+              <small
+                *ngIf="
+                  !pdfCreate.controls['receptionDate'].valid &&
+                  pdfCreate.controls['receptionDate'].dirty
+                "
+                style="font-size: 10px"
+                class="text-danger text-monospace"
+                >* Entrada no valida</small
+              >
+            </div>
+            <div class="p-col-6">
+              <span class="ui-float-label mt-2">
+                <input
+                  formControlName="issuingEntity"
+                  id="float-input"
+                  class="form-control"
+                  type="text"
+                  pInputText
+                  pTooltip="Ingresa el nombre de la entidad que emite el documento"
+                  tooltipEvent="focus"
+                  autocomplete="off"
+                />
+                <label for="float-input">Nombre del emisor</label>
+              </span>
+              <small
+                *ngIf="
+                  !pdfCreate.controls['issuingEntity'].valid &&
+                  pdfCreate.controls['issuingEntity'].dirty
+                "
+                style="font-size: 10px"
+                class="text-danger text-monospace"
+                >* Entrada no valida</small
+              >
+            </div>
+            <div class="p-col-6">
+              <span class="ui-float-label mt-2">
+                <input
+                  formControlName="receivingEntity"
+                  id="float-input"
+                  class="form-control"
+                  type="text"
+                  pInputText
+                  pTooltip="Ingresa el nombre de la entidad que recepta el documento"
+                  tooltipEvent="focus"
+                  autocomplete="off"
+                />
+                <label for="float-input">Nombre del receptor</label>
+              </span>
+              <small
+                *ngIf="
+                  !pdfCreate.controls['receivingEntity'].valid &&
+                  pdfCreate.controls['receivingEntity'].dirty
+                "
+                style="font-size: 10px"
+                class="text-danger text-monospace"
+                >* Entrada no valida</small
+              >
+            </div>
+            <div class="p-col-6">
+              <span class="ui-float-label mt-2">
+                <input
+                  formControlName="numberOfSheetsOriginalDocument"
+                  id="float-input"
+                  class="form-control"
+                  type="text"
+                  pInputText
+                  pTooltip="Ingresa la cantidad de hojas del documento"
+                  tooltipEvent="focus"
+                  autocomplete="off"
+                />
+                <label for="float-input">Numero de hojas del documento</label>
+              </span>
+              <small
+                *ngIf="
+                  !pdfCreate.controls['numberOfSheetsOriginalDocument'].valid &&
+                  pdfCreate.controls['numberOfSheetsOriginalDocument'].dirty
+                "
+                style="font-size: 10px"
+                class="text-danger text-monospace"
+                >* Entrada no valida</small
+              >
+            </div>
+            <div class="p-col-6">
+              <span class="ui-float-label mt-2">
+                <p-inputMask
+                  formControlName="segment"
+                  id="float-input"
+                  mask="99-99"
+                  pTooltip="Ingresa la numeracion del documento. Ej. 02-05, que es igual a (Hojas del 02 al 05)"
+                  tooltipEvent="hover"
+                ></p-inputMask>
+                <label for="float-input">Segmento numerico del documento</label>
+              </span>
+              <small
+                *ngIf="
+                  !pdfCreate.controls['segment'].valid &&
+                  pdfCreate.controls['segment'].dirty
+                "
+                style="font-size: 10px"
+                class="text-danger text-monospace"
+                >* Entrada no valida</small
+              >
+            </div>
+            <div class="p-col-12">
+              <span class="ui-float-label mt-2">
+                <textarea
+                  rows="1"
+                  cols="30"
+                  pInputTextarea
+                  autoResize="autoResize"
+                  formControlName="responsibleObservation"
+                  id="float-input"
+                  pTooltip="Ingresa alguna observacion que tengas que hacer con respecto al documento."
+                  tooltipEvent="focus"
+                  autocomplete="off"
+                ></textarea>
+                <label for="float-input"
+                  >Observacion de encargado (Opcional)</label
+                >
+              </span>
+              <small
+                *ngIf="
+                  !pdfCreate.controls['responsibleObservation'].valid &&
+                  pdfCreate.controls['responsibleObservation'].dirty
+                "
+                style="font-size: 10px"
+                class="text-danger text-monospace"
+                >* Entrada no valida</small
+              >
+            </div>
+            <div class="p-col-12">
+              <span class="ui-float-label mt-2">
+                <p-chips
+                  formControlName="keywords"
+                  placeholder="Información extra, presiona enter despues de cada dato."
+                  pTooltip="Ingresa palabras clave del documento que permitan identificarlo. Ej: oficio, potabilizacion, cabildo."
+                  tooltipPosition="top"
+                  tooltipEvent="hover"
+                ></p-chips>
+              </span>
+              <small
+                *ngIf="!pdfCreate.controls['keywords'].valid"
+                style="font-size: 10px"
+                class="text-danger text-monospace"
+                >* Entrada no valida</small
+              >
+            </div>
+            <div class="p-col-12">
+              <span class="ui-float-label">
+                <span style="color: #898989;"
+                  >Seleccione en donde guardar el PDF: </span
+                ><span class="text-success">{{ BreadcrumFiles }} </span>
+                <i
+                  class="pi pi-refresh"
+                  style="cursor: pointer;display: flex;justify-content: flex-end;"
+                  (click)="loadDirectory()"
+                ></i>
+              </span>
+              <p-tree
+                [value]="files"
+                layout="horizontal"
+                selectionMode="single"
+                [(selection)]="nodoSelect"
+                (onNodeSelect)="nodoSelectF($event)"
+              ></p-tree>
+              <small
+                *ngIf="!pdfCreate.controls['idFolder'].valid"
+                style="font-size: 10px"
+                class="text-danger text-monospace"
+                >* Selecciona una carpeta</small
+              >
+            </div>
+            <div class="p-col-12">
+              <span class="ui-float-label">
+                <input
+                  id="float-input"
+                  type="file"
+                  accept="application/pdf"
+                  #filesClaer
+                  (change)="selecteds($event)"
+                  pTooltip="Selecciona el documento."
+                  tooltipEvent="hover"
+                />
+              </span>
+              <small
+                *ngIf="!formData.has('images')"
+                style="font-size: 10px"
+                class="text-danger text-monospace"
+                >* Selecciona el pdf</small
+              >
+              <div *ngIf="invalidImages.length > 0" class="d-flex p-2">
+                <small
+                  style="font-size: 10px"
+                  class="text-danger text-monospace"
+                  >Estos archivos no se agregaran:</small
+                >
+                <small class="text-danger">
+                  <ul
+                    style="list-style: none;padding: 0px 30px;line-height: 1;"
+                  >
+                    <li *ngFor="let element of invalidImages">{{ element }}</li>
+                  </ul>
+                </small>
+              </div>
+              <div
+                *ngIf="uploadedFiles"
+                style="max-height: 400px; overflow-y: scroll; margin-top: 10px;"
+              >
+                <div
+                  *ngFor="let file of uploadedFiles"
+                  class="card p-2 mb-2 d-flex flex-row justify-content-around"
+                >
+                  <div>
+                    <i class="pi pi-file" style="font-size: 40px;"></i>
+                  </div>
+                  <div class="d-flex flex-column justify-content-center">
+                    <small
+                      ><strong>Nombre:</strong>
+                      {{ file.name.substring(0, 50) + "..." }}</small
+                    >
+                    <small><strong>Tamaño:</strong> {{ file.size }}</small>
+                    <small><strong>Tipo:</strong> {{ file.mimetype }}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p-progressBar *ngIf="progress" [value]="progress"></p-progressBar>
+      <div class="p-grid">
+        <div
+          *ngIf="pdfCreate.valid && uploadedFiles"
+          class="p-offset-3 p-col-6"
+        >
+          <button
+            pButton
+            type="submit"
+            label="Guardar documento"
+            class="ui-button ui-button-rounded ui-button-success"
+            style="width: 100%"
+          ></button>
+        </div>
+        <div class="p-col-3">
+          <button
+            pButton
+            type="button"
+            label="Cancelar"
+            class="ui-button ui-button-rounded ui-button-secondary"
+            style="width: 100%"
+            (click)="cancelarPDF()"
+          ></button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 
-<p-toast key="createSuccess" [style]="{marginTop: '80px'}"></p-toast>
-<p-toast key="errorCreatePdf" [style]="{marginTop: '80px'}"></p-toast>
+<p-toast key="createSuccess" [style]="{ marginTop: '80px' }"></p-toast>
+<p-toast key="errorCreatePdf" [style]="{ marginTop: '80px' }"></p-toast>

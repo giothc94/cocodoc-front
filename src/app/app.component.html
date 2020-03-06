@@ -1,17 +1,26 @@
-<div class="container">
-    <div class="headerCocodoc p-5 mb-3">
-        <div class="d-flex justify-content-center align-items-center">San José de Cocotog</div>
+<div class="d-flex flex-column justify-content-between">
+  <div class="headerCocodoc p-5">
+    <div class="d-flex justify-content-center align-items-center">
+      San José de Cocotog
     </div>
-    <p-menubar [model]="menu" *ngIf="isLogged">
-        <button pButton label="Logout" icon="pi pi-sign-out" style="margin-left:.25em" (click)="signOut()"></button>
-    </p-menubar>
-</div>
+    <div>
+      <p-menubar [model]="menu" *ngIf="isLogged">
+        <button
+          id="logout"
+          pButton
+          label="Logout"
+          icon="pi pi-sign-out"
+          style="margin-left:.25em"
+          (click)="signOut()"
+        ></button>
+      </p-menubar>
+    </div>
+  </div>
 
-<div class="container">
-    <div class="col-12">
-        <router-outlet></router-outlet>
-    </div>
-    <!-- <div class="mt-5 mb-5">
+  <router-outlet></router-outlet>
+  <!-- <div class="col-12">
+    </div> -->
+  <!-- <div class="mt-5 mb-5">
         <p-tabMenu [model]="menu" *ngIf="isLogged">
             <ng-template pTemplate="item" let-item let-i="index">
                 <div style="position: relative; text-align: center; min-width: 10em">
@@ -23,10 +32,10 @@
             </ng-template>
         </p-tabMenu>
     </div> -->
-</div>
-<footer class="container">
+  <footer>
     <div class="d-flex justify-content-center footerCocodoc">
-        <small class="giothcode">Of GIOTHCODE with 💚 2019&copy;</small>
+      <small class="giothcode">By GIOTHCODE 💚 2020&copy;</small>
     </div>
-</footer>
+  </footer>
+</div>
 <!-- ;display: flex;justify-content: center;align-items: center; -->

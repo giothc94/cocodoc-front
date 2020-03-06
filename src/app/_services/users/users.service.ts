@@ -24,19 +24,19 @@ export class UsersService {
   }
 
   createUser(user): Observable<any> {
-    return this.http.post(`${API_COCODOC.URL}users/`, user, {headers:this._headerAuthToken})
+    return this.http.post(`${API_COCODOC.URL}users/create`, user, {headers:this._headerAuthToken})
   }
   getUsers(): Observable<any> {
-    return this.http.get(`${API_COCODOC.URL}users/`, {headers:this._headerAuthToken});
+    return this.http.get(`${API_COCODOC.URL}users/list`, {headers:this._headerAuthToken});
   }
   getUser(id): Observable<any> {
-    return this.http.get(`${API_COCODOC.URL}users/${id}`,{headers:this._headerAuthToken});
+    return this.http.get(`${API_COCODOC.URL}users/${id}/get`,{headers:this._headerAuthToken});
   }
   deleteUser(id): Observable<any> {
-    return this.http.delete(`${API_COCODOC.URL}users/${id}`, {headers:this._headerAuthToken})
+    return this.http.delete(`${API_COCODOC.URL}users/${id}/delete`, {headers:this._headerAuthToken})
   }
   updateUser(user): Observable<any> {
-    return this.http.put(`${API_COCODOC.URL}users/`, user, {headers:this._headerAuthToken})
+    return this.http.put(`${API_COCODOC.URL}users/update`, user, {headers:this._headerAuthToken})
   }
   searchDataUser({keyword}){
     return this.http.post(`${API_COCODOC.URL}users/search`,{keyword:keyword},{headers:this._headerAuthToken })

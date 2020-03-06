@@ -1,24 +1,49 @@
-<div class="col-12 mt-5 mb-5">
+<div class="row">
+  <div class="col-12 mt-5 mb-5">
     <div class="p-grid p-dir-col p-align-center">
+      <div class="p-col-3">
         <p-card header="Login">
-            <div class="p-col-12">
-                <div class="ui-inputgroup">
-                    <span class="ui-inputgroup-addon"><i class="pi pi-user"></i></span>
-                    <input type="text" pInputText placeholder="Usuario" style="width: 100%" [(ngModel)]="user.user">
-                </div>
+          <div class="p-col-12">
+            <div class="ui-inputgroup">
+              <span class="ui-inputgroup-addon"
+                ><i class="pi pi-user"></i
+              ></span>
+              <input
+                type="text"
+                pInputText
+                placeholder="Usuario"
+                style="width: 100%"
+                [(ngModel)]="user.user"
+              />
             </div>
-            <div class="p-col-12">
-                <div class="ui-inputgroup">
-                    <span class="ui-inputgroup-addon"><i class="pi pi-key"></i></span>
-                    <input type="password" pInputText placeholder="Contraseña" style="width: 100%" [(ngModel)]="user.password">
-                </div>
+          </div>
+          <div class="p-col-12">
+            <div class="ui-inputgroup">
+              <span class="ui-inputgroup-addon"><i class="pi pi-key"></i></span>
+              <input
+                type="password"
+                pInputText
+                placeholder="Contraseña"
+                style="width: 100%"
+                [(ngModel)]="user.password"
+              />
             </div>
-            <div class="p-col-12">
-                <button pButton type="submit" label="Ingresar" class="ui-button ui-button-success" style="width: 100%" (click)="login()"></button>
-            </div>
+          </div>
+          <div class="p-col-12">
+            <button
+              pButton
+              type="submit"
+              label="Ingresar"
+              class="ui-button ui-button-success"
+              style="width: 100%"
+              (click)="login()"
+            ></button>
+          </div>
         </p-card>
+      </div>
     </div>
     <div class="p-offset-2 p-col-8">
-        <p-messages [(value)]="message"></p-messages>
+      <p-messages [(value)]="message"></p-messages>
     </div>
+  </div>
 </div>

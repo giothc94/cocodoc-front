@@ -70,7 +70,13 @@ export class IngresoPDFComponent implements OnInit {
       p.key = dir.path,
         p.expandedIcon = "fa fa-folder-open"
       p.collapsedIcon = "fa fa-folder"
-      p.children = childs
+      p.children = childs.sort((a, b) => {
+        var labelOne = a.label;
+        var labelTwo = b.label;
+        if (labelOne < labelTwo) return -1;
+        if (labelOne > labelTwo) return 1;
+        return 0;
+      });
       files.push(p)
     }
     return files
@@ -79,9 +85,10 @@ export class IngresoPDFComponent implements OnInit {
   loadDirectory() {
     this.ds.getDirectory()
       .subscribe(resp => {
-        if (resp.ok) {
-          const { objectDir } = resp.data;
-          this.files = this.generateDir(objectDir)
+        console.log('directory',resp)
+        if (resp.status === 200) {
+          const { dir } = resp.body;
+          this.files = this.generateDir(dir)
         }
       });
   }
@@ -145,7 +152,6 @@ export class IngresoPDFComponent implements OnInit {
             this.cancelarPDF()
           }
         }, error => {
-          this.cancelarPDF()
           this.showError('Problema con el documento', error.error.error.message)
         })
     }

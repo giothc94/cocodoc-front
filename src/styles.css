@@ -2,6 +2,11 @@
 
 @import url('https://fonts.googleapis.com/css?family=Pacifico&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Long+Cang&display=swap');
+
+* {
+    outline: none;
+}
+
 legend {
     width: auto !important;
 }
@@ -9,7 +14,7 @@ legend {
 .headerCocodoc {
     display: flex;
     background-image: linear-gradient(90deg, #fbfbfb, #eaeaea, #eaeaea);
-    margin-top: 0.4em;
+    /* margin-top: 0.4em; */
     height: 25vh;
     align-items: center;
     border-radius: 5px;
@@ -149,4 +154,35 @@ body .ui-tree .ui-tree-container {
 
 body .ui-treetable .ui-treetable-tbody>tr>td {
     padding: 0px !important;
+}
+body .ui-menubar {
+    padding: 0;
+    background-color: #ffffff;
+    border: none !important;
+    background-color: transparent !important;
+    margin: 0px 20px;
+}
+
+#logout {
+    margin: 0;
+    color: #ffffff !important;
+    background-color: #333333 !important;
+    border: 1px solid #333333 !important;
+    font-size: 14px;
+    -webkit-transition: background-color 0.2s, box-shadow 0.2s;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+#logout:enabled:hover {
+    background-color: #444444 !important;
+    color: #ffffff !important;
+    border-color: #444444 !important;
+}
+
+.ui-treetable .ui-treetable-toggler {
+    cursor: pointer !important;
+    display: inline-block !important;
+    height: initial !important;
+    position: relative !important;
+    top: 0 !important;
+    margin-top: 0 !important;
 }

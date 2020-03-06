@@ -1,49 +1,128 @@
 <div class="col-12 mt-2 mb-5">
-    <div class="p-grid">
-        <div class="p-col-12 p-justify-center">
-            <p-toolbar class="m-3">
-                <div class="ui-toolbar-group-left">
-                    <button pButton *ngIf="!collapse" icon="pi pi-folder-open" type="button" class="ui-button ui-button-success" label="Expandir carpetas" (click)="expandAll()" style="margin-right: .25em"></button>
-                    <button pButton *ngIf="collapse" icon="pi pi-folder" type="button" class="ui-button ui-button-success" label="Colapsar carpetas" (click)="collapseAll()"></button>
-                </div>
-                <div class="ui-toolbar-group-right" *ngIf="nodoSelect">
-                    <button pButton icon="pi pi-plus" type="button" class="ui-button ui-button-secondary" label="Nueva carpeta" (click)="activateNewFolder()" style="margin-right: .25em"></button>
-                    <button pButton icon="pi pi-pencil" type="button" class="ui-button ui-button-secondary" label="Renombrar carpeta" style="margin-right: .25em" (click)="activateRenameFolder()"></button>
-                    <button pButton icon="pi pi-minus" type="button" class="ui-button ui-button-secondary" label="Eliminar carpeta" style="margin-right: .25em" (click)="confirm()"></button>
-                </div>
-            </p-toolbar>
-            <div *ngIf="flagNewFolder">
-                <div class="p-grid">
-                    <div class="p-col-12 p-justify-center">
-                        <div class="card p-3">
-                            <div class="col-12">
-                                <div class="mt-1 mb-2" *ngIf="nodoSelect && operationMessage">
-                                    <p-message severity="info" text="{{operationMessage}} {{BreadcrumFiles}}{{newFile}}"></p-message>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <span class="ui-float-label mt-3">
-                                        <input [(ngModel)]="newFile" id="float-input" class="form-control" autocomplete="off" type="text" pInputText pTooltip="Ingrese el nombre para la carpeta" tooltipEvent="focus">
-                                        <label for="float-input">{{operation}}</label>
-                                    </span>
-                            </div>
-                            <div class="mt-3 col-12">
-                                <p-button *ngIf="operationMessage" label="Crear carpeta" styleClass="mr-2 ui-button-success ui-button-rounded" (click)="createFolder()"></p-button>
-                                <p-button *ngIf="!operationMessage" label="Renombrar carpeta" styleClass="mr-2 ui-button-success ui-button-rounded" (click)="renameFolder()"></p-button>
-                                <p-button label="Cancelar" (onClick)="cancelCreateFolder()" styleClass="ui-button-secondary ui-button-rounded"></p-button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <p-tree [value]="files" layout="horizontal" selectionMode="single" [(selection)]="nodoSelect" (onNodeSelect)="nodoSelectF($event)"></p-tree>
+  <div class="p-grid">
+    <div class="p-col-12 p-justify-center">
+      <p-toolbar class="mr-3 ml-3">
+        <div class="ui-toolbar-group-left">
+          <button
+            pButton
+            *ngIf="!collapse"
+            icon="pi pi-folder-open"
+            type="button"
+            class="ui-button ui-button-success"
+            label="Expandir carpetas"
+            (click)="expandAll()"
+            style="margin-right: .25em"
+          ></button>
+          <button
+            pButton
+            *ngIf="collapse"
+            icon="pi pi-folder"
+            type="button"
+            class="ui-button ui-button-success"
+            label="Colapsar carpetas"
+            (click)="collapseAll()"
+          ></button>
         </div>
+        <div class="ui-toolbar-group-right" *ngIf="nodoSelect">
+          <button
+            pButton
+            icon="pi pi-plus"
+            type="button"
+            class="ui-button ui-button-secondary"
+            label="Nueva carpeta"
+            (click)="activateNewFolder()"
+            style="margin-right: .25em"
+          ></button>
+          <button
+            pButton
+            icon="pi pi-pencil"
+            type="button"
+            class="ui-button ui-button-secondary"
+            label="Renombrar carpeta"
+            style="margin-right: .25em"
+            (click)="activateRenameFolder()"
+          ></button>
+          <button
+            pButton
+            icon="pi pi-minus"
+            type="button"
+            class="ui-button ui-button-secondary"
+            label="Eliminar carpeta"
+            style="margin-right: .25em"
+            (click)="confirm()"
+          ></button>
+        </div>
+      </p-toolbar>
+      <div *ngIf="flagNewFolder">
+        <div class="p-grid">
+          <div class="p-col-12 p-justify-center">
+            <div class="card p-3">
+              <div class="col-12">
+                <div class="mt-1 mb-2" *ngIf="nodoSelect && operationMessage">
+                  <p-message
+                    severity="info"
+                    text="{{ operationMessage }} {{ BreadcrumFiles }}{{
+                      newFile
+                    }}"
+                  ></p-message>
+                </div>
+              </div>
+              <div class="col-6">
+                <span class="ui-float-label mt-3">
+                  <input
+                    [(ngModel)]="newFile"
+                    id="float-input"
+                    class="form-control"
+                    autocomplete="off"
+                    type="text"
+                    pInputText
+                    pTooltip="Ingrese el nombre para la carpeta"
+                    tooltipEvent="focus"
+                  />
+                  <label for="float-input">{{ operation }}</label>
+                </span>
+              </div>
+              <div class="mt-3 col-12">
+                <p-button
+                  *ngIf="operationMessage"
+                  label="Crear carpeta"
+                  styleClass="mr-2 ui-button-success ui-button-rounded"
+                  (click)="createFolder()"
+                ></p-button>
+                <p-button
+                  *ngIf="!operationMessage"
+                  label="Renombrar carpeta"
+                  styleClass="mr-2 ui-button-success ui-button-rounded"
+                  (click)="renameFolder()"
+                ></p-button>
+                <p-button
+                  label="Cancelar"
+                  (onClick)="cancelCreateFolder()"
+                  styleClass="ui-button-secondary ui-button-rounded"
+                ></p-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p-tree
+        [value]="files"
+        layout="horizontal"
+        selectionMode="single"
+        [(selection)]="nodoSelect"
+        (onNodeSelect)="nodoSelectF($event)"
+      ></p-tree>
     </div>
+  </div>
 </div>
 
-<p-confirmDialog key="confirmDelete" header="Eliminar carpeta" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-confirmDialog
+  key="confirmDelete"
+  header="Eliminar carpeta"
+  icon="pi pi-exclamation-triangle"
+></p-confirmDialog>
 
-<p-toast key="errorEditUser" [style]="{marginTop: '80px'}"></p-toast>
-<p-toast key="createSeccess" [style]="{marginTop: '80px'}"></p-toast>
-<p-toast key="renameSeccess" [style]="{marginTop: '80px'}"></p-toast>
-<p-toast key="deleteSeccess" [style]="{marginTop: '80px'}"></p-toast>
+<p-toast key="errorEditUser" [style]="{ marginTop: '80px' }"></p-toast>
+<p-toast key="createSeccess" [style]="{ marginTop: '80px' }"></p-toast>
+<p-toast key="renameSeccess" [style]="{ marginTop: '80px' }"></p-toast>
+<p-toast key="deleteSeccess" [style]="{ marginTop: '80px' }"></p-toast>
