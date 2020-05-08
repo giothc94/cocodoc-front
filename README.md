@@ -25,6 +25,16 @@ Use el administrador de paquetes `npm` de [Node.js](https://nodejs.org/en/) para
 > npm install
 ```
 
+## Producción
+Para el servidor de producción debe configurar las variables de entorno antes de compilar, ubicadas en:
+```
+src/environments/environment.prod.ts
+```
+y
+```
+src/environments/environment.ts
+```
+
 ## Uso
 Para ejecutar, puede chequear el `package.json` para ver los scripts disponibles.
 

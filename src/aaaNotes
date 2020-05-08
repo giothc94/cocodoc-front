@@ -1,7 +1,0 @@
-"/^[0-9]*$/";        // Solo cadena vacia o numeros
-
-"/^[0-9]+$/";              // Solo numeros. No se admite cadena vacia
-
-"/^[a-zA-Z]+$/";             // Solo letras en mayusculas/minusculas. No se admite cadena vacia
-
-"/^[0-9a-zA-Z]+$/";        // Solo letras en mayusculas/minusculas y numeros. No se admite cadena vacia 
