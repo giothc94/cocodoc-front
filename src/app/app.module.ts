@@ -39,6 +39,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import {MenubarModule} from 'primeng/menubar';
 import {TreeTableModule} from 'primeng/treetable';
+import {DialogModule} from 'primeng/dialog';
 // fin primeng
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -99,6 +100,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     SelectButtonModule,
     MenubarModule,
     TreeTableModule,
+    DialogModule,
     //prettysize
     PrettySizeModule
   ],

@@ -16,8 +16,14 @@ export class DirectoryService {
   getDirectory():Observable<any>{
     return this.http.get(`${API_COCODOC.URL}directories/`,{headers:this.headers});
   }
+  generateReport({idFolder}):Observable<any>{
+    return this.http.get(`${API_COCODOC.URL}files/reports/${idFolder}`,{responseType:'arraybuffer', headers:this.headers});
+  }
   createFolder({nameFolder,destinationFolderCode}):Observable<any>{
     return this.http.post(`${API_COCODOC.URL}directories/`,{nameFolder,destinationFolderCode},{headers:this.headers});
+  }
+  createRootFolder({nameFolder}):Observable<any>{
+    return this.http.post(`${API_COCODOC.URL}directories/create-root-folder`,{nameFolder},{headers:this.headers});
   }
   renameFolder({newNameFolder,idFolder}):Observable<any>{
     return this.http.put(`${API_COCODOC.URL}directories/`,{newNameFolder,idFolder},{headers:this.headers});

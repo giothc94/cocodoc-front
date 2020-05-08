@@ -32,19 +32,47 @@ export class ArchivosComponent implements OnInit {
   nodoSelect: TreeNode;
   BreadcrumFiles: string;
   newFile: string;
-  rootFile: File;
+  rootFile: boolean = true;
+  modalRootFile: boolean = false;
   collapse: boolean = false;
   create: boolean = false;
   flagNewFolder: boolean = false;
   operation: string;
   operationMessage: string;
+  nameRootFolder: string;
 
   constructor(
     private ds: DirectoryService,
     private readonly messageService: MessageService,
     private confirmationService: ConfirmationService
   ) {}
-
+  generateReport() {
+    let { data: id, label: nameFolder } = this.nodoSelect;
+    this.ds
+      .generateReport({ idFolder: id })
+      .toPromise()
+      .then(data => {
+        let blob = new Blob([data], {
+          type:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        });
+        let url = window.URL.createObjectURL(blob);
+        let downloadLink = document.createElement("a");
+        downloadLink.href = url;
+        downloadLink.setAttribute("download", `${id}-${nameFolder}.xlsx`);
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        this.showSuccessDownloadReport();
+      })
+      .catch(error => {
+        if (error.status === 404) {
+          this.showError(
+            "Sin registros",
+            "No se encontraron registros en esta carpeta"
+          );
+        }
+      });
+  }
   generateDir(dir) {
     var files = [];
     var p: TreeNode = {
@@ -79,18 +107,55 @@ export class ArchivosComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.ds.getDirectory().subscribe(resp => {
-      if (resp.status === 200) {
-        const { dir } = resp.body;
-        this.files = this.generateDir(dir);
-        console.log("Files:: ", this.files);
-        this.files.forEach(node => {
-          this.expandRecursive(node, true);
-        });
-        this.collapse = true;
+    this.ds.getDirectory().subscribe(
+      resp => {
+        if (resp.status === 200) {
+          const { dir } = resp.body;
+          this.files = this.generateDir(dir);
+          console.log("Files:: ", this.files);
+          this.files.forEach(node => {
+            this.expandRecursive(node, true);
+          });
+          this.collapse = true;
+          this.rootFile = false;
+        }
+      },
+      ({ error }) => {
+        if (error.error.cod === "ENOROOT") {
+          this.rootFile = true;
+        }
+        console.log("Error:::: ", error.error.message);
       }
-    });
+    );
   }
+  openRootModal() {
+    this.modalRootFile = true;
+  }
+  saveRootFolder() {
+    if (this.nameRootFolder) {
+      this.ds
+        .createRootFolder({
+          nameFolder: this.nameRootFolder
+        })
+        .subscribe(
+          resp => {
+            this.ngOnInit();
+            this.showSuccessCreateFolder();
+            this.nameRootFolder = "";
+            this.modalRootFile = false;
+          },
+          ({ error }) => {
+            let { message } = error.error;
+            if (message.includes("fails to match"))
+              message = "No puede crear la carpeta con ese nombre.";
+            this.showError("No se creo la carpeta", message);
+          }
+        );
+    } else {
+      this.showError("Sin nombre.", "Ingrese un nombre para la carpeta.");
+    }
+  }
+
   nodoSelectF(event) {
     if (event.node) {
       this.nodoSelect = event.node;
@@ -142,6 +207,7 @@ export class ArchivosComponent implements OnInit {
             this.newFile = "";
           },
           ({ error }) => {
+            console.log(error);
             let { message } = error.error;
             if (message.includes("fails to match"))
               message = "No puede crear la carpeta con ese nombre.";
@@ -205,7 +271,8 @@ export class ArchivosComponent implements OnInit {
       key: "createSeccess",
       severity: "success",
       summary: "Carpeta creada",
-      detail: "Has creado una carpeta en el sistema"
+      detail: "Has creado una carpeta en el sistema",
+      life: 1500
     });
   }
   showSuccessRenameFolder() {
@@ -213,7 +280,8 @@ export class ArchivosComponent implements OnInit {
       key: "renameSeccess",
       severity: "success",
       summary: "Carpeta renombrada",
-      detail: "Has renombrado una carpeta en el sistema"
+      detail: "Has renombrado una carpeta en el sistema",
+      life: 1500
     });
   }
   showSuccessDeleteFolder() {
@@ -221,7 +289,17 @@ export class ArchivosComponent implements OnInit {
       key: "deleteSeccess",
       severity: "success",
       summary: "Carpeta borrada",
-      detail: "Has eliminado una carpeta del sistema"
+      detail: "Has eliminado una carpeta del sistema",
+      life: 1500
+    });
+  }
+  showSuccessDownloadReport() {
+    this.messageService.add({
+      key: "deleteSeccess",
+      severity: "success",
+      summary: "Reporte descargado",
+      detail: "Has Descargado el repoprte exitosamente",
+      life: 1500
     });
   }
   showError(summary, detail) {
@@ -240,6 +318,8 @@ export class ArchivosComponent implements OnInit {
       accept: () => {
         this.ds.deleteFolder({ idFolder: this.nodoSelect.data }).subscribe(
           resp => {
+            this.files = [];
+            this.nodoSelect = null;
             this.ngOnInit();
             this.showSuccessDeleteFolder();
           },

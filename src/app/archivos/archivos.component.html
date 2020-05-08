@@ -5,7 +5,7 @@
         <div class="ui-toolbar-group-left">
           <button
             pButton
-            *ngIf="!collapse"
+            *ngIf="!collapse && !rootFile"
             icon="pi pi-folder-open"
             type="button"
             class="ui-button ui-button-success"
@@ -15,15 +15,35 @@
           ></button>
           <button
             pButton
-            *ngIf="collapse"
+            *ngIf="collapse && !rootFile"
             icon="pi pi-folder"
             type="button"
             class="ui-button ui-button-success"
             label="Colapsar carpetas"
             (click)="collapseAll()"
+            style="margin-right: .25em"
+          ></button>
+          <button
+            pButton
+            *ngIf="rootFile"
+            icon="pi pi-plus"
+            type="button"
+            class="ui-button"
+            label="Crear carpeta raiz"
+            (click)="openRootModal()"
+            style="margin-right: .25em"
           ></button>
         </div>
         <div class="ui-toolbar-group-right" *ngIf="nodoSelect">
+          <button
+            pButton
+            icon="pi pi-file"
+            type="button"
+            class="ui-button ui-button-secondary"
+            label="Generar reporte"
+            (click)="generateReport()"
+            style="margin-right: .25em"
+          ></button>
           <button
             pButton
             icon="pi pi-plus"
@@ -121,6 +141,20 @@
   header="Eliminar carpeta"
   icon="pi pi-exclamation-triangle"
 ></p-confirmDialog>
+
+<p-dialog header="Crear carpeta root" [(visible)]="modalRootFile">
+  <span class="ui-float-label mt-3">
+    <input id="float-input" type="text" size="30" pInputText [(ngModel)]="nameRootFolder"/>
+    <label for="float-input">Nombre de la carpeta root</label>
+  </span>
+  <button
+    pButton
+    type="button"
+    label="Crear"
+    (click)="saveRootFolder()"
+    class="ui-button-rounded ui-button-success mt-4"
+  ></button>
+</p-dialog>
 
 <p-toast key="errorEditUser" [style]="{ marginTop: '80px' }"></p-toast>
 <p-toast key="createSeccess" [style]="{ marginTop: '80px' }"></p-toast>
