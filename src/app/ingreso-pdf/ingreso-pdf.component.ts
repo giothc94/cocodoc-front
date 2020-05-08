@@ -25,7 +25,7 @@ export class IngresoPDFComponent implements OnInit {
   nodoSelect: TreeNode
   BreadcrumFiles
   formData = new FormData()
-  private progress;
+  progress;
   invalidImages = []
 
   constructor(private ds: DirectoryService, private messageService: MessageService, private fb: FormBuilder, private PDF: FilesService, private prettySize: PrettySizeService) {

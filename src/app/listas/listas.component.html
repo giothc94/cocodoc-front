@@ -178,7 +178,7 @@
                   <small><strong>FECHA DE EMISION:</strong></small>
                 </td>
                 <td style="padding-left: 10px;">
-                  <small>{{ cardPdf.broadcastDate | date: shortDate }}</small>
+                  <small>{{ cardPdf.broadcastDate | date: 'dd-MM-yy' }}</small>
                 </td>
               </tr>
               <tr>
@@ -189,7 +189,7 @@
                   <small><strong>FECHA DE RECEPCION:</strong></small>
                 </td>
                 <td style="padding-left: 10px;">
-                  <small>{{ cardPdf.receptionDate | date: shortDate }}</small>
+                  <small>{{ cardPdf.receptionDate | date: 'dd-MM-yy' }}</small>
                 </td>
               </tr>
               <tr>

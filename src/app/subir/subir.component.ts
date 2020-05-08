@@ -30,7 +30,7 @@ export class SubirComponent implements OnInit {
   nodoSelect: TreeNode;
   BreadcrumFiles;
   formData = new FormData();
-  private progress;
+  progress;
   invalidImages = [];
 
   constructor(
